@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaya Angkat Pesawat Udara — Simulasi Interaktif</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0B2340;
+    --navy-soft: #2E4A6B;
+    --sky-top: #EAF2F8;
+    --sky-mid: #B9D8ED;
+    --sky-deep: #0B3D62;
+    --amber: #F2A93B;
+    --amber-dim: #C98A2E;
+    --teal: #2E86AB;
+    --panel: #F5F8FA;
+    --line: #D6E1E8;
+    --red: #C0453A;
+    --green: #2F8F5B;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background: var(--panel);
+    color: var(--navy);
+    font-family: 'Inter', sans-serif;
+    line-height:1.5;
+  }
+
+  h1,h2, .stat-value, .formula-eq{ font-family:'Space Grotesk', sans-serif; }
+
+  .page{
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+  }
+
+  .hero h1{
+    font-size: clamp(28px, 4.5vw, 40px);
+    font-weight:600;
+    margin: 0 0 14px;
+    color: var(--navy);
+  }
+
+  .hero .lede{
+    max-width: 62ch;
+    color: var(--navy-soft);
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .stage{
+    margin-top: 32px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 60%, var(--sky-deep) 100%);
+    border: 1px solid var(--line);
+  }
+
+  .stage svg{ display:block; width:100%; height:auto; }
+
+  .controls{
+    margin-top: 28px;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 640px){
+    .controls{ grid-template-columns: 1fr; }
+  }
+
+  .control{
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+
+  .control label{
+    display:block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy-soft);
+    margin-bottom: 10px;
+  }
+
+  .control-row{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+  }
+
+  input[type="range"]{
+    flex:1;
+    accent-color: var(--amber-dim);
+    height: 4px;
+  }
+
+  .control output{
+    min-width: 56px;
+    text-align:right;
+    font-variant-numeric: tabular-nums;
+    font-weight:600;
+    font-size: 14px;
+  }
+
+  .readout{
+    margin-top: 20px;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 640px){
+    .readout{ grid-template-columns: 1fr; }
+  }
+
+  .stat{
+    background: var(--navy);
+    color: white;
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+
+  .stat-label{
+    display:block;
+    font-size: 12px;
+    color: #B9CBE0;
+    margin-bottom: 6px;
+  }
+
+  .stat-value{
+    display:block;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .stat-value.warn{ color: var(--amber); }
+  .stat-value.good{ color: #6FE0A6; }
+  .stat-value.bad{ color: #F09C93; }
+
+  .formula{
+    margin-top: 28px;
+    padding: 18px 20px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  .formula-eq{
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  .formula-sub{
+    margin:0;
+    font-size: 14px;
+    color: var(--navy-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .notes{
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--navy-soft);
+    max-width: 68ch;
+  }
+
+  .notes p{ margin: 0 0 10px; }
+
+  .wake-line{
+    stroke: #7FB3D5;
+    stroke-width: 1.6;
+    fill:none;
+    opacity: 0;
+  }
+
+  .wake-line.active{
+    animation: flicker 0.6s infinite alternate ease-in-out;
+  }
+
+  @keyframes flicker{
+    from{ opacity: 0.15; }
+    to{ opacity: 0.55; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <h1>Gaya angkat pesawat udara</h1>
+    <p class="lede">Sayap menghasilkan gaya angkat karena bentuknya membelokkan aliran udara ke bawah, dan sudut serang terhadap arah angin mengatur seberapa besar pembelokan itu. Geser kontrol di bawah untuk melihat pengaruhnya secara langsung.</p>
+  </header>
+
+  <section class="stage">
+    <svg id="liftSvg" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- reference horizon -->
+      <line x1="40" y1="160" x2="230" y2="160" stroke="#7FA9C7" stroke-width="1.4" stroke-dasharray="4 5"/>
+
+      <!-- streamlines above wing -->
+      <g id="streamAbove" stroke="#6FA9CE" stroke-width="1.6" fill="none" opacity="0.85"></g>
+      <!-- streamlines below wing -->
+      <g id="streamBelow" stroke="#7FB3D5" stroke-width="1.4" fill="none" opacity="0.6"></g>
+
+      <!-- turbulent wake behind wing on stall -->
+      <g id="wake"></g>
+
+      <!-- angle arc -->
+      <path id="angleArc" d="" stroke="#0B3D62" stroke-width="1.6" fill="none"/>
+      <text id="angleLabel" x="245" y="150" font-size="14" fill="#0B2340" font-family="Space Grotesk, sans-serif" font-weight="600">5°</text>
+
+      <!-- freestream arrow -->
+      <g id="freestream" stroke="#0B2340" stroke-width="2.2" fill="none">
+        <line id="freestreamLine" x1="90" y1="160" x2="248" y2="160"/>
+        <path id="freestreamHead" d=""/>
+      </g>
+
+      <!-- wing -->
+      <path id="wing" d="M250,160 C 300,132 380,124 440,140 C 500,152 540,158 550,160 C 500,172 350,178 250,160 Z"
+            fill="#1B2B3F" stroke="#0B1622" stroke-width="1.5"/>
+
+      <!-- lift vector -->
+      <g id="liftVec" stroke="#F2A93B" stroke-width="4">
+        <line id="liftLine" x1="330" y1="160" x2="330" y2="60"/>
+        <path id="liftHead" d="M330,60 L323,72 L337,72 Z" fill="#F2A93B"/>
+      </g>
+      <text id="liftTag" x="340" y="70" font-size="13" fill="#B8781F" font-family="Space Grotesk, sans-serif" font-weight="600">Angkat</text>
+
+      <!-- weight reference vector -->
+      <g id="weightVec" stroke="#E8EDF2" stroke-width="2" stroke-dasharray="3 4">
+        <line id="weightLine" x1="380" y1="160" x2="380" y2="260"/>
+      </g>
+      <text x="390" y="255" font-size="12" fill="#E8EDF2" font-family="Inter, sans-serif">Berat pesawat</text>
+
+    </svg>
+  </section>
+
+  <section class="controls">
+    <div class="control">
+      <label for="alpha">Sudut serang (α)</label>
+      <div class="control-row">
+        <input type="range" id="alpha" min="-5" max="20" step="1" value="5">
+        <output id="alphaOut">5°</output>
+      </div>
+    </div>
+    <div class="control">
+      <label for="speed">Kecepatan udara (V)</label>
+      <div class="control-row">
+        <input type="range" id="speed" min="60" max="280" step="5" value="140">
+        <output id="speedOut">140 km/j</output>
+      </div>
+    </div>
+    <div class="control">
+      <label for="alt">Ketinggian (kerapatan udara)</label>
+      <div class="control-row">
+        <input type="range" id="alt" min="0" max="10000" step="500" value="0">
+        <output id="altOut">0 m</output>
+      </div>
+    </div>
+  </section>
+
+  <section class="readout">
+    <div class="stat">
+      <span class="stat-label">Koefisien angkat (CL)</span>
+      <span class="stat-value" id="clVal">–</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Gaya angkat (L)</span>
+      <span class="stat-value" id="liftVal">–</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Status</span>
+      <span class="stat-value" id="statusVal">–</span>
+    </div>
+  </section>
+
+  <section class="formula">
+    <p class="formula-eq">L = ½ · ρ · V² · A · C<sub>L</sub></p>
+    <p class="formula-sub" id="formulaSub">–</p>
+  </section>
+
+  <div class="notes">
+    <p>Simulasi ini memakai referensi pesawat ringan bersayap tetap dengan luas sayap 16,2 m² dan berat kotor sekitar 1.100 kg, mirip pesawat latih bermesin tunggal. Nilai CL memakai model sederhana: naik hampir linear hingga sudut serang sekitar 15°, lalu turun tajam karena aliran udara terlepas dari permukaan sayap — peristiwa yang disebut stall (kehilangan daya angkat).</p>
+    <p>Kerapatan udara (ρ) menurun seiring ketinggian, sehingga pada ketinggian jelajah pesawat butuh kecepatan atau sudut serang lebih besar untuk menghasilkan gaya angkat yang sama seperti di permukaan laut.</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const alphaInput = document.getElementById('alpha');
+  const speedInput = document.getElementById('speed');
+  const altInput = document.getElementById('alt');
+
+  const alphaOut = document.getElementById('alphaOut');
+  const speedOut = document.getElementById('speedOut');
+  const altOut = document.getElementById('altOut');
+
+  const clVal = document.getElementById('clVal');
+  const liftVal = document.getElementById('liftVal');
+  const statusVal = document.getElementById('statusVal');
+  const formulaSub = document.getElementById('formulaSub');
+
+  const streamAbove = document.getElementById('streamAbove');
+  const streamBelow = document.getElementById('streamBelow');
+  const wake = document.getElementById('wake');
+  const angleArc = document.getElementById('angleArc');
+  const angleLabel = document.getElementById('angleLabel');
+  const freestreamLine = document.getElementById('freestreamLine');
+  const freestreamHead = document.getElementById('freestreamHead');
+  const liftLine = document.getElementById('liftLine');
+  const liftHead = document.getElementById('liftHead');
+  const liftTag = document.getElementById('liftTag');
+
+  const WING_AREA = 16.2;      // m^2
+  const AIRCRAFT_KG = 1100;    // kg, referensi berat kotor
+  const STALL_ANGLE = 15;
+  const PIVOT_X = 250, PIVOT_Y = 160;
+  const LIFT_ORIGIN_X = 330, LIFT_ORIGIN_Y = 160;
+  const PX_PER_KGF = 100 / AIRCRAFT_KG; // 100px mewakili berat pesawat referensi
+
+  function clOf(alphaDeg){
+    if(alphaDeg <= STALL_ANGLE){
+      return 0.1 * alphaDeg;
+    }
+    return Math.max(0.35, 1.5 - 0.12 * (alphaDeg - STALL_ANGLE));
+  }
+
+  function densityAt(altM){
+    return 1.225 * Math.exp(-altM / 8500);
+  }
+
+  function buildStreamline(peak, dir){
+    // dir: 1 = above wing (curves up), -1 = below wing (bulges slightly down)
+    const yBase = PIVOT_Y - (dir === 1 ? 26 : -14);
+    const bulge = dir * peak;
+    return `M60,${yBase} C 200,${yBase} 300,${yBase - bulge} 400,${yBase - bulge} C 500,${yBase - bulge} 600,${yBase} 740,${yBase}`;
+  }
+
+  function render(){
+    const alpha = parseFloat(alphaInput.value);
+    const speedKmh = parseFloat(speedInput.value);
+    const altM = parseFloat(altInput.value);
+
+    alphaOut.textContent = alpha + '°';
+    speedOut.textContent = speedKmh + ' km/j';
+    altOut.textContent = altM + ' m';
+
+    const v = speedKmh / 3.6; // m/s
+    const rho = densityAt(altM);
+    const cl = clOf(alpha);
+    const liftN = 0.5 * rho * v * v * WING_AREA * cl;
+    const liftKgf = liftN / 9.81;
+    const stalled = alpha > STALL_ANGLE;
+
+    clVal.textContent = cl.toFixed(2);
+    liftVal.textContent = liftKgf.toFixed(0) + ' kgf';
+
+    if(stalled){
+      statusVal.textContent = 'Stall — aliran terlepas';
+      statusVal.className = 'stat-value warn';
+    } else if(liftKgf >= AIRCRAFT_KG){
+      statusVal.textContent = 'Cukup untuk terbang';
+      statusVal.className = 'stat-value good';
+    } else {
+      statusVal.textContent = 'Belum cukup mengangkat';
+      statusVal.className = 'stat-value bad';
+    }
+
+    formulaSub.textContent =
+      `ρ = ${rho.toFixed(3)} kg/m³ · V = ${v.toFixed(1)} m/s · A = ${WING_AREA} m² · CL = ${cl.toFixed(2)}  →  L ≈ ${liftN.toFixed(0)} N (${liftKgf.toFixed(0)} kgf)`;
+
+    // --- angle arc + freestream arrow ---
+    const rad = alpha * Math.PI / 180;
+    const armLen = 158;
+    const startX = PIVOT_X - armLen * Math.cos(rad);
+    const startY = PIVOT_Y + armLen * Math.sin(rad);
+    freestreamLine.setAttribute('x1', startX.toFixed(1));
+    freestreamLine.setAttribute('y1', startY.toFixed(1));
+    freestreamLine.setAttribute('x2', (PIVOT_X - 2).toFixed(1));
+    freestreamLine.setAttribute('y2', (PIVOT_Y + 2 * Math.sin(rad)).toFixed(1));
+
+    const headSize = 8;
+    const hx = PIVOT_X - 2, hy = PIVOT_Y + 2 * Math.sin(rad);
+    const backAngle1 = rad + Math.PI - 0.4;
+    const backAngle2 = rad + Math.PI + 0.4;
+    freestreamHead.setAttribute('d',
+      `M${hx},${hy} L${hx + headSize*Math.cos(backAngle1)},${hy - headSize*Math.sin(backAngle1)} L${hx + headSize*Math.cos(backAngle2)},${hy - headSize*Math.sin(backAngle2)} Z`);
+
+    const arcR = 60;
+    const arcStartX = PIVOT_X - arcR;
+    const arcStartY = PIVOT_Y;
+    const arcEndX = PIVOT_X - arcR * Math.cos(rad);
+    const arcEndY = PIVOT_Y + arcR * Math.sin(rad);
+    const largeArc = alpha > 180 ? 1 : 0;
+    angleArc.setAttribute('d', `M${arcStartX},${arcStartY} A${arcR},${arcR} 0 ${largeArc} ${alpha < 0 ? 0 : 1} ${arcEndX},${arcEndY}`);
+    angleLabel.setAttribute('x', (PIVOT_X - arcR - 20).toFixed(0));
+    angleLabel.setAttribute('y', (PIVOT_Y - (alpha >= 0 ? 10 : -18)).toFixed(0));
+    angleLabel.textContent = alpha + '°';
+
+    // --- streamlines: curvature scales with CL, capped ---
+    const clForVisual = Math.max(0, Math.min(cl, 1.5));
+    const abovePeak = 8 + clForVisual * 34;
+    const belowPeak = 6 + clForVisual * 6;
+
+    streamAbove.innerHTML = '';
+    streamBelow.innerHTML = '';
+    const aboveOffsets = [46, 30, 16];
+    const belowOffsets = [-40, -24];
+    aboveOffsets.forEach(off => {
+      const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d', buildStreamline(abovePeak * (1 - off/90), 1).replace(/PIVOT_Y - 26/g, ''));
+      p.setAttribute('transform', `translate(0,${-off})`);
+      streamAbove.appendChild(p);
+    });
+    belowOffsets.forEach(off => {
+      const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d', buildStreamline(belowPeak, -1));
+      p.setAttribute('transform', `translate(0,${-off})`);
+      streamBelow.appendChild(p);
+    });
+
+    // --- turbulent wake on stall ---
+    wake.innerHTML = '';
+    if(stalled){
+      const jitterCount = 5;
+      for(let i=0;i<jitterCount;i++){
+        const y = 130 + i*10 + Math.sin(i)*4;
+        const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+        p.setAttribute('class','wake-line active');
+        p.setAttribute('style', `animation-delay:${i*0.08}s`);
+        p.setAttribute('d', `M560,${y} Q600,${y + (i%2?10:-10)} 640,${y} T720,${y}`);
+        wake.appendChild(p);
+      }
+    }
+
+    // --- lift vector ---
+    const maxPx = 190;
+    let liftPx = liftKgf * PX_PER_KGF;
+    liftPx = Math.max(6, Math.min(liftPx, maxPx));
+    const liftTopY = LIFT_ORIGIN_Y - liftPx;
+    liftLine.setAttribute('y2', liftTopY.toFixed(1));
+    liftHead.setAttribute('d', `M${LIFT_ORIGIN_X},${liftTopY.toFixed(1)} L${LIFT_ORIGIN_X-7},${(liftTopY+12).toFixed(1)} L${LIFT_ORIGIN_X+7},${(liftTopY+12).toFixed(1)} Z`);
+    liftTag.setAttribute('y', (liftTopY - 8).toFixed(1));
+
+    const liftColor = stalled ? '#C0453A' : (liftKgf >= AIRCRAFT_KG ? '#2F8F5B' : '#F2A93B');
+    document.getElementById('liftVec').setAttribute('stroke', liftColor);
+    liftHead.setAttribute('fill', liftColor);
+  }
+
+  [alphaInput, speedInput, altInput].forEach(el => el.addEventListener('input', render));
+  render();
+})();
+</script>
+
+</body>
+</html>
