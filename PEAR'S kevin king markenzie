@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pear s-phone</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0a0a0a',
+                            dark: '#10100f',
+                            card: 'rgba(255,255,255,0.03)',
+                            silver: '#e5e7eb',
+                            lightSilver: '#ffffff',
+                            hoverSilver: '#d1d5db',
+                            text: '#f5f5f4',
+                            textMuted: '#a3a3a3',
+                            border: 'rgba(255,255,255,0.1)',
+                            glow: 'rgba(255,255,255,0.15)',
+                            live: '#10b981'
+                        }
+                    },
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #f5f5f4;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Dot Grid Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(255, 255, 255, 0.15);
+        }
+        .silver-text-gradient {
+            background: linear-gradient(to right, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Animasi mengambang untuk gambar handphone */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-brand-silver selection:text-black">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass border-b-0 border-brand-border px-6 md:px-12 py-4 flex justify-between items-center">
+        <!-- Logo Pear -->
+        <a href="#" class="flex items-center space-x-2">
+            <img src="10881.png" alt="Pear Logo" class="h-8 w-auto filter brightness-0 invert">
+            <span class="font-inter font-semibold text-xl tracking-tight">Pear</span>
+        </a>
+        
+        <div class="hidden md:flex space-x-8 text-[11px] uppercase tracking-widest text-brand-textMuted font-semibold">
+            <a href="#overview" class="hover:text-brand-lightSilver transition-colors">Overview</a>
+            <a href="#features" class="hover:text-brand-lightSilver transition-colors">Tech Specs</a>
+            <a href="#design" class="hover:text-brand-lightSilver transition-colors">Design</a>
+        </div>
+        <a href="#pricing" class="bg-brand-text text-brand-black px-6 py-2 rounded-full text-sm font-medium hover:bg-brand-hoverSilver transition-colors">
+            Pre-order
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <main id="overview" class="flex-grow pt-32 pb-10 px-6 md:px-12 flex flex-col items-center text-center">
+        <h1 class="font-inter font-bold text-5xl md:text-7xl lg:text-8xl max-w-5xl leading-tight mb-4 tracking-tighter">
+            s-phone
+        </h1>
+        <h2 class="font-playfair italic text-2xl md:text-4xl text-brand-textMuted mb-10">
+            <span class="silver-text-gradient">Brilliance</span> in every detail.
+        </h2>
+        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 z-10 mb-16">
+            <a href="#pricing" class="bg-brand-text text-brand-black px-8 py-3 rounded-full font-medium hover:bg-brand-hoverSilver transition-colors">
+                Beli Sekarang
+            </a>
+            <a href="#features" class="glass px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+                Pelajari Lebih Lanjut
+            </a>
+        </div>
+
+        <!-- Gambar Handphone -->
+        <div class="relative w-full max-w-5xl mx-auto flex items-center justify-center mt-4">
+            <!-- Efek Cahaya di belakang HP -->
+            <div class="absolute w-[60%] h-[60%] bg-white rounded-full blur-[120px] opacity-10"></div>
+            <!-- Gambar s-phone -->
+            <img src="10938.png" alt="Pear s-phone Silver" class="relative z-10 w-full h-auto object-contain animate-float drop-shadow-2xl">
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 px-6 md:px-12 bg-brand-dark/50 border-t border-brand-border">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-inter font-bold text-3xl md:text-5xl mb-4">Pro in every way.</h2>
+                <p class="text-brand-textMuted text-lg">Teknologi terdepan untuk pengalaman yang tak tertandingi.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Feature 1: Camera -->
+                <div class="glass-card p-8 group">
+                    <div class="w-12 h-12 glass rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="camera" class="text-brand-lightSilver w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 group-hover:text-brand-lightSilver transition-colors">Sistem Kamera Pro</h3>
+                    <p class="text-brand-textMuted text-sm leading-relaxed">Sistem lensa ganda revolusioner. Tangkap detail luar biasa dalam kondisi cahaya apa pun.</p>
+                </div>
+                <!-- Feature 2: Chipset -->
+                <div class="glass-card p-8 group">
+                    <div class="w-12 h-12 glass rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="cpu" class="text-brand-lightSilver w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 group-hover:text-brand-lightSilver transition-colors">Pear P-1 Bionic</h3>
+                    <p class="text-brand-textMuted text-sm leading-relaxed">Chipset paling cerdas dan bertenaga yang pernah ada di dalam sebuah smartphone.</p>
+                </div>
+                <!-- Feature 3: Battery -->
+                <div class="glass-card p-8 group">
+                    <div class="w-12 h-12 glass rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="battery-charging" class="text-brand-lightSilver w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 group-hover:text-brand-lightSilver transition-colors">Baterai Sepanjang Hari</h3>
+                    <p class="text-brand-textMuted text-sm leading-relaxed">Daya tahan baterai yang menemanimu dari pagi hingga malam tanpa henti.</p>
+                </div>
+                <!-- Feature 4: Design -->
+                <div class="glass-card p-8 group">
+                    <div class="w-12 h-12 glass rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="shield-check" class="text-brand-lightSilver w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 group-hover:text-brand-lightSilver transition-colors">Ceramic Shield</h3>
+                    <p class="text-brand-textMuted text-sm leading-relaxed">Material kaca perak premium yang lebih tangguh dari kaca ponsel cerdas mana pun.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col items-center">
+            <h2 class="font-inter font-bold text-4xl md:text-5xl mb-6 text-center">Pilih s-phone mu.</h2>
+            <p class="text-brand-textMuted mb-12 text-center">Tersedia dalam kapasitas penyimpanan yang sesuai dengan kebutuhanmu.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+                <!-- 128GB -->
+                <div class="glass-card p-8 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">128GB</h3>
+                    <p class="text-brand-textMuted text-sm mb-6 h-10">Cocok untuk penggunaan sehari-hari.</p>
+                    <div class="text-4xl font-inter font-semibold mb-8">$799</div>
+                    <button class="w-full glass py-3 rounded-full mb-8 hover:bg-white/10 transition-colors">Pre-order</button>
+                    <ul class="space-y-4 text-sm text-brand-textMuted flex-grow">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-brand-lightSilver mr-3"></i>Warna Silver Premium</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-brand-lightSilver mr-3"></i>Pear Care+ Opsional</li>
+                    </ul>
+                </div>
+                
+                <!-- 256GB (Highlighted) -->
+                <div class="glass-card p-8 flex flex-col border-brand-lightSilver/40 relative shadow-[0_0_30px_rgba(255,255,255,0.1)] md:-translate-y-4">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-lightSilver text-brand-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full font-bold">Paling Populer</div>
+                    <h3 class="text-2xl font-bold mb-2">256GB</h3>
+                    <p class="text-brand-textMuted text-sm mb-6 h-10">Ruang ekstra untuk foto dan video.</p>
+                    <div class="text-4xl font-inter font-semibold mb-8 text-white">$899</div>
+                    <button class="w-full bg-brand-lightSilver text-brand-black py-3 rounded-full mb-8 hover:bg-brand-hoverSilver transition-colors font-medium">Pre-order</button>
+                    <ul class="space-y-4 text-sm text-brand-textMuted flex-grow">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-brand-black mr-3 bg-brand-lightSilver rounded-full p-[2px]"></i>Warna Silver Premium</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-brand-black mr-3 bg-brand-lightSilver rounded-full p-[2px]"></i>Pear Care+ Opsional</li>
+                    </ul>
+                </div>
+
+                <!-- 512GB -->
+                <div class="glass-card p-8 flex flex-col">
+                    <h3 class="text-2xl font-bold mb-2">512GB</h3>
+                    <p class="text-brand-textMuted text-sm mb-6 h-10">Kapasitas maksimal untuk para kreator.</p>
+                    <div class="text-4xl font-inter font-semibold mb-8">$1099</div>
+                    <button class="w-full glass py-3 rounded-full mb-8 hover:bg-white/10 transition-colors">Pre-order</button>
+                    <ul class="space-y-4 text-sm text-brand-textMuted flex-grow">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-brand-lightSilver mr-3"></i>Warna Silver Premium</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-brand-lightSilver mr-3"></i>Pear Care+ Opsional</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-brand-border py-12 px-6 md:px-12 bg-brand-dark">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="10881.png" alt="Pear Logo" class="h-6 w-auto filter brightness-0 invert">
+                    <span class="font-inter font-bold text-xl text-brand-text">Pear</span>
+                </div>
+                <p class="text-brand-textMuted text-sm">Think different, think Pear.</p>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold mb-4 text-brand-text">Produk</h4>
+                <ul class="space-y-2 text-sm text-brand-textMuted">
+                    <li><a href="#" class="hover:text-brand-lightSilver transition-colors">s-phone</a></li>
+                    <li><a href="#" class="hover:text-brand-lightSilver transition-colors">Pear Pad</a></li>
+                    <li><a href="#" class="hover:text-brand-lightSilver transition-colors">Pear Book</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold mb-4 text-brand-text">Layanan</h4>
+                <ul class="space-y-2 text-sm text-brand-textMuted">
+                    <li><a href="#" class="hover:text-brand-lightSilver transition-colors">Pear Music</a></li>
+                    <li><a href="#" class="hover:text-brand-lightSilver transition-colors">Pear Cloud</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold mb-4 text-brand-text">Dapatkan Berita Terbaru</h4>
+                <div class="flex">
+                    <input type="email" placeholder="Email Anda" class="glass rounded-l-full px-4 py-2 text-sm w-full outline-none focus:border-brand-lightSilver/50 transition-colors bg-transparent placeholder-brand-textMuted text-brand-text">
+                    <button class="bg-brand-text text-brand-black px-4 py-2 rounded-r-full hover:bg-brand-hoverSilver transition-colors">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Inisialisasi Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
