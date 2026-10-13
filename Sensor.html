@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Pendeteksi Uang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        /* Mengatur ukuran video agar rapi di layar */
+        #kamera {
+            width: 100%;
+            max-width: 500px;
+            border: 3px solid #333;
+            border-radius: 10px;
+            background-color: #000;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pemindai Uang</h1>
+    <p>Arahkan kamera ke uang untuk mendeteksi nilainya.</p>
+    
+    <!-- Elemen untuk menampilkan video dari kamera -->
+    <video id="kamera" autoplay playsinline></video>
+    <br>
+    <button id="tombolMulai">Mulai Kamera</button>
+
+    <script>
+        // Mengambil elemen HTML untuk dimanipulasi dengan JavaScript
+        const elemenVideo = document.getElementById('kamera');
+        const tombolMulai = document.getElementById('tombolMulai');
+
+        // Fungsi untuk menyalakan kamera
+        async function mulaiKamera() {
+            try {
+                // Konfigurasi kamera: meminta video, dan memprioritaskan kamera belakang (environment) di HP
+                const konfigurasi = {
+                    video: {
+                        facingMode: "environment" 
+                    }
+                };
+
+                // Meminta izin dan mengakses kamera
+                const stream = await navigator.mediaDevices.getUserMedia(konfigurasi);
+                
+                // Menyambungkan data video dari kamera ke elemen HTML <video>
+                elemenVideo.srcObject = stream;
+                
+                // Menyembunyikan tombol setelah kamera berhasil menyala
+                tombolMulai.style.display = 'none';
+
+            } catch (error) {
+                // Pesan ini muncul jika pengguna menolak izin atau perangkat tidak punya kamera
+                console.error("Error mengakses kamera: ", error);
+                alert("Tidak dapat mengakses kamera. Pastikan kamu memberikan izin akses kamera.");
+            }
+        }
+
+        // Menjalankan fungsi mulaiKamera saat tombol diklik
+        tombolMulai.addEventListener('click', mulaiKamera);
+    </script>
+
+</body>
+</html>
