@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendeteksi Nominal Uang 💵</title>
+    <style>
+        /* CSS: Untuk merapikan tampilan agar ramah pengguna */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 { color: #333; }
+        /* Membatasi lebar video agar tidak terlalu besar di layar laptop */
+        video {
+            width: 100%;
+            max-width: 400px;
+            border: 4px solid #4CAF50;
+            border-radius: 12px;
+            background-color: #000;
+        }
+        /* Desain tombol */
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            margin: 15px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button:hover { background-color: #45a049; }
+        /* Teks hasil deteksi */
+        #hasil {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pendeteksi Uang 💵</h1>
+    <p>Arahkan uang ke kamera, lalu klik tombol "Deteksi Uang".</p>
+
+    <!-- Elemen video untuk menampilkan tangkapan kamera -->
+    <!-- playsinline penting agar video tidak otomatis full screen di iOS -->
+    <video id="kamera" autoplay playsinline></video>
+    <br>
+    
+    <button id="tombolMulai">Izinkan & Nyalakan Kamera</button>
+    <button id="tombolDeteksi" style="display:none;">Mulai Deteksi Uang!</button>
+
+    <div id="hasil">Kamera belum menyala...</div>
+
+    <script>
+        // --- BAGIAN JAVASCRIPT ---
+        
+        // 1. Mengambil referensi elemen dari HTML
+        const elemenKamera = document.getElementById('kamera');
+        const tombolMulai = document.getElementById('tombolMulai');
+        const tombolDeteksi = document.getElementById('tombolDeteksi');
+        const elemenHasil = document.getElementById('hasil');
+
+        // 2. Fungsi untuk meminta izin dan menyalakan kamera
+        async function nyalakanKamera() {
+            try {
+                // Meminta izin video. 'facingMode: "environment"' mengutamakan kamera belakang (kamera utama HP)
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: "environment" }
+                });
+                
+                // Jika diizinkan, masukkan stream kamera ke elemen <video>
+                elemenKamera.srcObject = stream;
+                
+                // Ubah tampilan antarmuka
+                tombolMulai.style.display = 'none'; // Sembunyikan tombol nyalakan
+                tombolDeteksi.style.display = 'inline-block'; // Tampilkan tombol deteksi
+                elemenHasil.innerText = "Kamera aktif. Siap mendeteksi!";
+                
+            } catch (error) {
+                // Menangani error jika pengguna menolak izin atau tidak ada kamera
+                console.error("Gagal mengakses kamera:", error);
+                elemenHasil.innerText = "Gagal membuka kamera. Pastikan Anda memberikan izin akses kamera pada browser.";
+            }
+        }
+
+        // 3. Fungsi untuk membilang/mengucapkan teks (Text-to-Speech)
+        function bicara(teks) {
+            // Mengecek apakah browser mendukung fitur suara
+            if ('speechSynthesis' in window) {
+                const ucapan = new SpeechSynthesisUtterance(teks);
+                ucapan.lang = 'id-ID'; // Mengatur bahasa ke Bahasa Indonesia
+                window.speechSynthesis.speak(ucapan);
+            } else {
+                console.log("Browser Anda tidak mendukung fitur suara.");
+            }
+        }
+
+        // 4. Fungsi simulasi untuk mendeteksi uang
+        function deteksiUang() {
+            elemenHasil.innerText = "Sedang menganalisis gambar...";
+
+            // Simulasi proses delay AI selama 1.5 detik menggunakan setTimeout
+            setTimeout(() => {
+                // KODE AI SEBENARNYA AKAN DITARUH DI SINI NANTINYA
+                // Untuk simulasi, kita pilih nominal secara acak
+                const nominalSimulasi = ["10.000 Rupiah", "50.000 Rupiah", "100.000 Rupiah", "20.000 Rupiah"];
+                const hasilAcak = nominalSimulasi[Math.floor(Math.random() * nominalSimulasi.length)];
+
+                // Buat kalimat hasil
+                const pesan = "Mendeteksi uang dengan nominal " + hasilAcak;
+                
+                // Tampilkan di layar
+                elemenHasil.innerText = pesan;
+
+                // Bilang/ucapkan nominalnya lewat speaker HP/Komputer
+                bicara(pesan);
+            }, 1500); 
+        }
+
+        // 5. Menyambungkan tombol dengan fungsi saat diklik
+        tombolMulai.addEventListener('click', nyalakanKamera);
+        tombolDeteksi.addEventListener('click', deteksiUang);
+    </script>
+</body>
+</html>
