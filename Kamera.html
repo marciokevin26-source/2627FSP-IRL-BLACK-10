@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendeteksi Uang Pintar</title>
+    <!-- Memuat library TensorFlow.js dan Teachable Machine -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 { color: #333; }
+        #webcam-container {
+            margin: 20px auto;
+            border: 5px solid #4CAF50;
+            border-radius: 10px;
+            overflow: hidden;
+            max-width: 100%;
+            width: 300px;
+        }
+        #label-container {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-top: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Pendeteksi Uang Pintar</h2>
+    <button type="button" onclick="init()">Mulai Kamera & Deteksi</button>
+    <div id="webcam-container"></div>
+    <div id="label-container">Menunggu kamera...</div>
+
+    <script>
+        // GANTI URL DI BAWAH INI dengan URL model Teachable Machine milikmu nanti
+        const URL = "https://teachablemachine.withgoogle.com/models/CONTOH_URL_KAMU/";
+
+        let model, webcam, labelContainer, maxPredictions;
+        let lastSpoken = ""; // Mencegah HP berbicara berulang-ulang tanpa henti
+
+        // Fungsi untuk memulai aplikasi
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            // 1. Memuat model AI
+            document.getElementById("label-container").innerText = "Memuat AI...";
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            // 2. Mengatur Kamera HP (menggunakan kamera belakang)
+            const flip = false; // Tidak di-mirror karena pakai kamera belakang
+            webcam = new tmImage.Webcam(300, 300, flip);
+            await webcam.setup({ facingMode: "environment" }); // "environment" = kamera belakang
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+
+            // 3. Menampilkan kamera ke layar
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            labelContainer = document.getElementById("label-container");
+        }
+
+        // Fungsi ini akan terus berjalan (looping) untuk mengecek kamera
+        async function loop() {
+            webcam.update(); 
+            await predict();
+            window.requestAnimationFrame(loop);
+        }
+
+        // Fungsi untuk menebak gambar dan membacanya
+        async function predict() {
+            // AI menebak gambar dari webcam
+            const prediction = await model.predict(webcam.canvas);
+            
+            // Mencari tebakan dengan tingkat keyakinan tertinggi
+            let highestProb = 0;
+            let bestClass = "";
+
+            for (let i = 0; i < maxPredictions; i++) {
+                if (prediction[i].probability > highestProb) {
+                    highestProb = prediction[i].probability;
+                    bestClass = prediction[i].className;
+                }
+            }
+
+            // Jika AI yakin di atas 85% (0.85)
+            if (highestProb > 0.85) {
+                labelContainer.innerText = bestClass;
+                
+                // Mencegah HP menyebutkan angka yang sama berulang-ulang dalam 1 detik
+                if (bestClass !== lastSpoken && bestClass !== "Bukan Uang") {
+                    speak(bestClass);
+                    lastSpoken = bestClass;
+                    
+                    // Reset suara setelah 3 detik agar bisa membaca uang yang sama lagi jika perlu
+                    setTimeout(() => { lastSpoken = ""; }, 3000);
+                }
+            }
+        }
+
+        // Fungsi untuk membilang (mengubah teks menjadi suara)
+        function speak(text) {
+            // Memastikan fitur suara didukung oleh HP/Browser
+            if ('speechSynthesis' in window) {
+                let msg = new SpeechSynthesisUtterance();
+                msg.text = text;
+                msg.lang = 'id-ID'; // Bahasa Indonesia
+                window.speechSynthesis.speak(msg);
+            }
+        }
+    </script>
+</body>
+</html>
