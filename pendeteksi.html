@@ -6,44 +6,49 @@
     <title>Pendeteksi Nominal Uang AI 💵</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f9; }
-        h1 { color: #333; }
+        h1 { color: #333; font-size: 24px; }
         video { width: 100%; max-width: 400px; border: 4px solid #4CAF50; border-radius: 12px; background-color: #000; }
-        /* Elemen canvas ini disembunyikan, hanya dipakai di belakang layar untuk mengambil foto */
         canvas { display: none; } 
-        button { padding: 12px 24px; font-size: 16px; margin: 15px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button { padding: 12px 24px; font-size: 16px; margin: 10px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         button:hover { background-color: #45a049; }
         button:disabled { background-color: #cccccc; cursor: not-allowed; }
-        #hasil { font-size: 24px; font-weight: bold; margin-top: 20px; color: #2c3e50; min-height: 30px;}
+        #hasil { font-size: 20px; font-weight: bold; margin-top: 20px; color: #2c3e50; min-height: 30px;}
+        
+        /* Desain untuk kotak input API Key */
+        .kotak-api { background: #fff; padding: 15px; margin: 15px auto; max-width: 400px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: left;}
+        input[type="password"] { width: 90%; padding: 10px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;}
     </style>
 </head>
 <body>
 
     <h1>Pendeteksi Uang AI 💵</h1>
-    <p>Arahkan uang Rupiah ke kamera dengan jelas, lalu klik tombol deteksi.</p>
+    
+    <!-- Kotak untuk memasukkan API Key langsung di web -->
+    <div class="kotak-api">
+        <label for="inputApiKey"><b>1. Masukkan API Key Gemini:</b></label><br>
+        <input type="password" id="inputApiKey" placeholder="Tempel (Paste) API Key di sini...">
+        <p style="font-size: 12px; color: #666; margin-top: 5px;">*Dapatkan kunci gratis di <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+    </div>
 
     <video id="kamera" autoplay playsinline></video>
-    <!-- Canvas untuk menangkap frame dari video -->
     <canvas id="kanvasFoto"></canvas> 
     <br>
     
-    <button id="tombolMulai">1. Nyalakan Kamera</button>
-    <button id="tombolDeteksi" style="display:none;">2. Deteksi Uang Sekarang!</button>
+    <button id="tombolMulai">2. Nyalakan Kamera</button>
+    <button id="tombolDeteksi" style="display:none;">3. Deteksi Uang Sekarang!</button>
 
     <div id="hasil">Kamera belum menyala...</div>
 
     <script>
-        // --- ⚠️ PENTING: GANTI DENGAN API KEY ANDA ⚠️ ---
-        // Dapatkan di: https://aistudio.google.com/app/apikey
-        const GEMINI_API_KEY = 'MASUKKAN_API_KEY_GEMINI_ANDA_DI_SINI'; 
-        
         const elemenKamera = document.getElementById('kamera');
         const kanvasFoto = document.getElementById('kanvasFoto');
         const contextKanvas = kanvasFoto.getContext('2d');
         const tombolMulai = document.getElementById('tombolMulai');
         const tombolDeteksi = document.getElementById('tombolDeteksi');
         const elemenHasil = document.getElementById('hasil');
+        const inputApiKey = document.getElementById('inputApiKey'); // Mengambil elemen kolom isian API
 
-        // Fungsi menyalakan kamera (Sama seperti sebelumnya)
+        // Fungsi menyalakan kamera
         async function nyalakanKamera() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
@@ -57,7 +62,7 @@
             }
         }
 
-        // Fungsi berbicara (Sama seperti sebelumnya)
+        // Fungsi berbicara
         function bicara(teks) {
             if ('speechSynthesis' in window) {
                 const ucapan = new SpeechSynthesisUtterance(teks);
@@ -68,89 +73,75 @@
 
         // Fungsi mengambil gambar dari video
         function ambilFotoDariVideo() {
-            // Set ukuran canvas sama dengan ukuran video asli
             kanvasFoto.width = elemenKamera.videoWidth;
             kanvasFoto.height = elemenKamera.videoHeight;
-            // Gambar frame video saat ini ke canvas
             contextKanvas.drawImage(elemenKamera, 0, 0, kanvasFoto.width, kanvasFoto.height);
-            // Ubah gambar di canvas menjadi format teks Base64 (JPEG)
             const dataUrl = kanvasFoto.toDataURL('image/jpeg', 0.8);
-            // Buang awalan "data:image/jpeg;base64," agar tersisa data mentahnya saja
             return dataUrl.split(',')[1]; 
         }
 
         // Fungsi untuk mengirim gambar ke AI (Gemini API)
         async function deteksiUangAI() {
-            if (GEMINI_API_KEY === 'MASUKKAN_API_KEY_GEMINI_ANDA_DI_SINI') {
-                alert("Anda belum memasukkan API Key Gemini di dalam kode script!");
+            // MENGAMBIL API KEY DARI KOTAK ISIAN
+            const GEMINI_API_KEY = inputApiKey.value.trim();
+
+            // Cek apakah kotak API Key kosong
+            if (GEMINI_API_KEY === '') {
+                alert("Mohon tempelkan API Key Gemini Anda di kotak putih yang tersedia di atas layar!");
+                inputApiKey.focus(); // Arahkan kursor ke kotak isian
                 return;
             }
 
-            tombolDeteksi.disabled = true; // Matikan tombol sementara
+            tombolDeteksi.disabled = true; 
             elemenHasil.innerText = "Memotret dan menganalisis dengan AI... ⏳";
 
             try {
                 const base64Image = ambilFotoDariVideo();
-
-                // URL Endpoint Google Gemini API (model gemini-1.5-flash cocok untuk gambar)
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
                 
-                // Menyiapkan pertanyaan (prompt) untuk AI
                 const promptText = "Kamu adalah alat pendeteksi uang tunai Rupiah Indonesia untuk tunanetra. Lihat gambar ini. Jika ada uang kertas atau koin Rupiah Indonesia yang terlihat jelas, balas HANYA dengan angka nominalnya saja (contoh: 100000, 50000, 2000, 500). Jangan gunakan titik atau huruf. Jika tidak ada uang, atau gambar tidak jelas, balas dengan kata 'Tidak Terdeteksi'.";
 
-                // Struktur data yang diminta oleh API Gemini
                 const requestBody = {
                     contents: [{
                         parts: [
                             { text: promptText },
-                            {
-                                inline_data: {
-                                    mime_type: "image/jpeg",
-                                    data: base64Image
-                                }
-                            }
+                            { inline_data: { mime_type: "image/jpeg", data: base64Image } }
                         ]
                     }]
                 };
 
-                // Mengirim permintaan (Request) ke server Google
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(requestBody)
                 });
 
+                // Jika API Key salah, Google akan menolak
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`Gagal. Pastikan API Key yang Anda masukkan benar!`);
                 }
 
                 const data = await response.json();
-                
-                // Mengambil teks balasan dari AI
                 let jawabanAI = data.candidates[0].content.parts[0].text.trim();
                 
-                // Memproses jawaban untuk diucapkan
                 if (jawabanAI.toLowerCase().includes("tidak terdeteksi")) {
                     elemenHasil.innerText = "Uang tidak terdeteksi dengan jelas.";
                     bicara("Uang tidak terdeteksi. Silakan coba lagi.");
                 } else if (!isNaN(jawabanAI)) {
-                    // Jika balasannya angka (misal "100000")
-                    // Format angka dengan titik agar mudah dibaca di layar (100.000)
                     let angkaBerformat = parseInt(jawabanAI).toLocaleString('id-ID'); 
                     elemenHasil.innerText = `Terdeteksi: Rp ${angkaBerformat}`;
-                    bicara(`${jawabanAI} Rupiah`); // Berbicara langsung angkanya
+                    bicara(`${jawabanAI} Rupiah`); 
                 } else {
-                     // Jaga-jaga jika AI menjawab selain angka
                     elemenHasil.innerText = "Hasil: " + jawabanAI;
                     bicara(jawabanAI);
                 }
 
             } catch (error) {
                 console.error("Error deteksi:", error);
-                elemenHasil.innerText = "Terjadi kesalahan saat menghubungi AI.";
+                elemenHasil.innerText = "Terjadi kesalahan. Cek kembali koneksi internet atau API Key Anda.";
                 bicara("Terjadi kesalahan jaringan.");
             } finally {
-                tombolDeteksi.disabled = false; // Nyalakan tombol kembali
+                tombolDeteksi.disabled = false; 
             }
         }
 
