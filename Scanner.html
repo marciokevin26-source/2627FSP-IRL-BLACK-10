@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Scanner AI & Ensiklopedia</title>
+    
+    <!-- Memuat TensorFlow.js dan Model COCO-SSD (Scanner Akurat) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; padding: 10px; background-color: #1e1e1e; color: white; margin: 0;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        h1 { font-size: clamp(20px, 5vw, 26px); margin-bottom: 5px; color: #4CAF50; }
+        .penjelasan { font-size: 13px; color: #aaa; max-width: 500px; margin: 5px 15px 15px 15px; }
+        
+        /* Area Sensor Kamera */
+        .area-pemindai {
+            width: 100%; max-width: 480px; position: relative; 
+            border-radius: 12px; overflow: hidden; border: 3px solid #4CAF50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+            margin-bottom: 15px; background: #000;
+        }
+        
+        video { width: 100%; display: block; object-fit: cover; }
+        
+        /* Kanvas ini menumpuk di atas video untuk menggambar kotak sensor */
+        canvas { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            pointer-events: none; /* Agar tidak menghalangi sentuhan */
+        }
+        
+        button { 
+            padding: 15px 30px; font-size: 16px; font-weight: bold; cursor: pointer; 
+            background-color: #4CAF50; color: white; border: none; border-radius: 50px; 
+            width: 90%; max-width: 400px; transition: 0.3s;
+        }
+        button:hover { background-color: #45a049; }
+        button:disabled { background-color: #555; color: #888; cursor: not-allowed; }
+
+        /* Kotak Ensiklopedia */
+        #ensiklopedia {
+            background: #2a2a2a; border-left: 5px solid #4CAF50; padding: 15px;
+            margin-top: 20px; width: 90%; max-width: 450px; border-radius: 8px;
+            text-align: left; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        #ensiklopedia h3 { margin: 0 0 10px 0; color: #4CAF50; text-transform: capitalize; }
+        #ensiklopedia p { margin: 0; font-size: 14px; line-height: 1.5; color: #ddd; }
+        
+        #status-ai { font-size: 14px; color: #FFC107; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>Pemindai AI & Ensiklopedia 🌐</h1>
+    <p class="penjelasan">AI akan membuat kotak sensor di sekitar benda dan menyimpulkan apa benda tersebut menggunakan data dari Ensiklopedia Wikipedia (Tanpa API Key).</p>
+
+    <div id="status-ai">Sedang mengaktifkan sistem saraf AI...</div>
+
+    <!-- Area Video dan Sensor -->
+    <div class="area-pemindai">
+        <video id="kamera" autoplay playsinline></video>
+        <canvas id="kanvasSensor"></canvas>
+    </div>
+    
+    <button id="tombolDeteksi" disabled>Menyiapkan Sensor...</button>
+
+    <!-- Tempat menampilkan data Ensiklopedia -->
+    <div id="ensiklopedia">
+        <h3 id="judulBenda">Nama Benda</h3>
+        <p id="deskripsiBenda">Mencari informasi di ensiklopedia dunia...</p>
+    </div>
+
+    <script>
+        const elemenKamera = document.getElementById('kamera');
+        const kanvasSensor = document.getElementById('kanvasSensor');
+        const context = kanvasSensor.getContext('2d');
+        
+        const tombolDeteksi = document.getElementById('tombolDeteksi');
+        const statusAI = document.getElementById('status-ai');
+        
+        const panelEnsiklopedia = document.getElementById('ensiklopedia');
+        const judulBenda = document.getElementById('judulBenda');
+        const deskripsiBenda = document.getElementById('deskripsiBenda');
+
+        let modelScannerAI;
+
+        // 1. Menyalakan Kamera (Berlaku untuk semua perangkat)
+        async function nyalakanKamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' }, audio: false 
+                });
+                elemenKamera.srcObject = stream;
+                
+                // PENTING: Tunggu video siap dimainkan agar kita tahu ukuran aslinya
+                elemenKamera.onloadedmetadata = () => {
+                    kanvasSensor.width = elemenKamera.videoWidth;
+                    kanvasSensor.height = elemenKamera.videoHeight;
+                };
+            } catch (error) {
+                statusAI.innerText = "Gagal mengakses kamera. Mohon beri izin.";
+            }
+        }
+
+        // 2. Memuat AI Pemindai yang lebih canggih (COCO-SSD)
+        async function muatModelAI() {
+            try {
+                modelScannerAI = await cocoSsd.load();
+                statusAI.innerText = "✅ Sensor AI Siap Digunakan!";
+                statusAI.style.color = "#4CAF50";
+                
+                tombolDeteksi.innerText = "Pindai & Cari Kesimpulan";
+                tombolDeteksi.disabled = false; 
+            } catch (error) {
+                statusAI.innerText = "❌ Gagal memuat AI. Pastikan internet menyala.";
+                statusAI.style.color = "#F44336";
+            }
+        }
+
+        // 3. Menghubungi Wikipedia untuk mencari fakta benda
+        async function tarikDataEnsiklopedia(namaBenda) {
+            try {
+                // Mengambil data dari Wikipedia Inggris (Gratis, tanpa API Key)
+                const urlWiki = `https://en.wikipedia.org/api/rest_v1/page/summary/${namaBenda}`;
+                const respon = await fetch(urlWiki);
+                const data = await respon.json();
+
+                panelEnsiklopedia.style.display = "block"; // Munculkan panel
+                judulBenda.innerText = `Kesimpulan AI: ${namaBenda}`;
+
+                if (data.type === "standard") {
+                    deskripsiBenda.innerText = data.extract; // Menampilkan ringkasan ensiklopedia
+                } else {
+                    deskripsiBenda.innerText = "AI mengenali bentuknya, namun tidak menemukan artikel spesifik di Ensiklopedia.";
+                }
+            } catch (error) {
+                deskripsiBenda.innerText = "Gagal terhubung ke ensiklopedia.";
+            }
+        }
+
+        // 4. Fungsi Utama Pemindaian
+        async function pindaiSekarang() {
+            if (!modelScannerAI) return;
+
+            tombolDeteksi.disabled = true;
+            tombolDeteksi.innerText = "Memindai Area...";
+            panelEnsiklopedia.style.display = "none";
+
+            // Bersihkan coretan sensor lama
+            context.clearRect(0, 0, kanvasSensor.width, kanvasSensor.height);
+
+            try {
+                // AI mencari letak barang di dalam video
+                const deteksi = await modelScannerAI.detect(elemenKamera);
+                
+                if (deteksi.length > 0) {
+                    // Ambil barang pertama yang paling AI yakini
+                    const barangUtama = deteksi[0];
+                    const namaBarang = barangUtama.class;
+                    const akurasi = Math.round(barangUtama.score * 100);
+
+                    // Menggambar "Kotak Sensor" berwarna hijau di layar
+                    context.beginPath();
+                    // barangUtama.bbox berisi data letak: [x, y, lebar, tinggi]
+                    context.rect(...barangUtama.bbox); 
+                    context.lineWidth = 4;
+                    context.strokeStyle = "#4CAF50";
+                    context.fillStyle = "#4CAF50";
+                    context.stroke();
+                    
+                    // Menulis teks akurasi di atas kotak
+                    context.font = "18px Arial";
+                    context.fillText(`${namaBarang} (${akurasi}%)`, barangUtama.bbox[0], barangUtama.bbox[1] > 20 ? barangUtama.bbox[1] - 5 : 20);
+
+                    // Setelah dapat barangnya, AI menyimpulkan dengan ensiklopedia
+                    tombolDeteksi.innerText = "Mengambil Kesimpulan...";
+                    await tarikDataEnsiklopedia(namaBarang);
+
+                } else {
+                    panelEnsiklopedia.style.display = "block";
+                    judulBenda.innerText = "Kosong";
+                    deskripsiBenda.innerText = "Sensor AI tidak menemukan objek yang dikenali di depan kamera.";
+                }
+            } catch (error) {
+                console.error(error);
+                statusAI.innerText = "Terjadi kesalahan saat memindai.";
+            } finally {
+                tombolDeteksi.innerText = "Pindai & Cari Kesimpulan";
+                tombolDeteksi.disabled = false;
+            }
+        }
+
+        // Jalankan saat web dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            nyalakanKamera();
+            muatModelAI();
+        });
+
+        tombolDeteksi.addEventListener('click', pindaiSekarang);
+    </script>
+</body>
+</html>
