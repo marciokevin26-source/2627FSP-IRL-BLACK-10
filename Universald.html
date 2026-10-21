@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pendeteksi Objek & Info Google</title>
+    
+    <!-- Memuat TensorFlow.js dan model MobileNet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@latest"></script>
+
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 10px; 
+            background-color: #f0f2f5; 
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: #1a1a1a; font-size: clamp(20px, 5vw, 26px); margin-bottom: 5px;}
+        
+        .penjelasan { font-size: clamp(12px, 3vw, 14px); color: #666; max-width: 500px; margin: 5px 15px 15px 15px; line-height: 1.4; }
+        
+        .video-container {
+            width: 100%; max-width: 480px; position: relative; background: #000;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 15px;
+        }
+        video { width: 100%; display: block; object-fit: cover; }
+        
+        img#gambarFrame, canvas#kanvasFoto { display: none; } 
+        
+        /* Desain Tombol Utama */
+        button { 
+            padding: 15px 30px; font-size: clamp(16px, 4vw, 18px); font-weight: bold;
+            cursor: pointer; background-color: #28a745; color: white; border: none; 
+            border-radius: 50px; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+            width: 90%; max-width: 400px; transition: background-color 0.3s; margin-bottom: 10px;
+        }
+        button:hover { background-color: #218838; }
+        button:disabled { background-color: #cccccc; box-shadow: none; cursor: not-allowed; }
+        
+        /* Desain Tombol Google (Disembunyikan di awal) */
+        #tombolGoogle {
+            display: none; /* Sembunyi sampai benda dideteksi */
+            padding: 12px 25px; font-size: clamp(14px, 3.5vw, 16px); font-weight: bold;
+            cursor: pointer; background-color: #4285F4; /* Warna Biru Google */
+            color: white; border: none; border-radius: 50px; 
+            box-shadow: 0 4px 6px rgba(66, 133, 244, 0.3);
+            width: 90%; max-width: 400px; text-decoration: none; margin-top: 10px;
+        }
+        #tombolGoogle:hover { background-color: #3367d6; }
+
+        #hasil { font-size: clamp(18px, 4.5vw, 22px); font-weight: bold; margin-top: 15px; color: #2c3e50; min-height: 40px; padding: 0 15px; }
+        #status-ai { font-size: 14px; color: #d35400; font-style: italic; margin-bottom: 15px; padding: 5px 10px; background: #fdf2e9; border-radius: 4px;}
+    </style>
+</head>
+<body>
+
+    <h1>Pendeteksi & Ensiklopedia 🔍</h1>
+    <p class="penjelasan">Arahkan kamera ke benda, biarkan AI menebaknya, lalu klik tombol Google untuk mendapatkan informasi mendalam!</p>
+
+    <div id="status-ai">Mengunduh otak AI ke perangkat Anda...</div>
+
+    <div class="video-container">
+        <video id="kamera" autoplay playsinline></video>
+    </div>
+    
+    <canvas id="kanvasFoto"></canvas>
+    <img id="gambarFrame" src="" alt="Frame Kamera">
+    
+    <button id="tombolDeteksi" disabled>Menyiapkan AI...</button>
+
+    <div id="hasil">Silakan tunggu...</div>
+
+    <!-- Tombol Pintas ke Google (Berupa link <a> yang didesain seperti tombol) -->
+    <a id="tombolGoogle" href="#" target="_blank">Cari Info Mendalam di Google</a>
+
+    <script>
+        const elemenKamera = document.getElementById('kamera');
+        const kanvasFoto = document.getElementById('kanvasFoto');
+        const contextKanvas = kanvasFoto.getContext('2d');
+        const gambarFrame = document.getElementById('gambarFrame');
+        
+        const tombolDeteksi = document.getElementById('tombolDeteksi');
+        const tombolGoogle = document.getElementById('tombolGoogle'); // Ambil elemen tombol Google
+        const elemenHasil = document.getElementById('hasil');
+        const statusAI = document.getElementById('status-ai');
+
+        let modelAI;
+
+        async function nyalakanKamera() {
+            try {
+                const constraints = { video: { facingMode: 'environment' }, audio: false };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                elemenKamera.srcObject = stream;
+            } catch (error) {
+                console.error("Error kamera:", error);
+                elemenHasil.innerText = "Kamera diblokir. Mohon izinkan akses.";
+            }
+        }
+
+        async function muatModelAI() {
+            try {
+                modelAI = await mobilenet.load();
+                statusAI.innerText = "✅ AI Siap!";
+                statusAI.style.color = "#155724";
+                statusAI.style.backgroundColor = "#d4edda";
+                
+                tombolDeteksi.innerText = "1. Deteksi Objek Ini";
+                tombolDeteksi.disabled = false; 
+                elemenHasil.innerText = "Arahkan kamera ke suatu barang.";
+            } catch (error) {
+                statusAI.innerText = "❌ Gagal memuat AI. Cek koneksi internet.";
+            }
+        }
+
+        function bicara(teks) {
+            if ('speechSynthesis' in window) {
+                const ucapan = new SpeechSynthesisUtterance(teks);
+                ucapan.lang = 'id-ID'; 
+                window.speechSynthesis.speak(ucapan);
+            }
+        }
+
+        async function deteksiObjek() {
+            if (!modelAI) return;
+
+            tombolDeteksi.disabled = true;
+            tombolGoogle.style.display = 'none'; // Sembunyikan tombol Google saat proses
+            elemenHasil.innerText = "Menganalisis... ⏳";
+
+            try {
+                kanvasFoto.width = elemenKamera.videoWidth;
+                kanvasFoto.height = elemenKamera.videoHeight;
+                
+                contextKanvas.drawImage(elemenKamera, 0, 0, kanvasFoto.width, kanvasFoto.height);
+                gambarFrame.src = kanvasFoto.toDataURL('image/jpeg');
+
+                gambarFrame.onload = async () => {
+                    // AI memprediksi gambar
+                    const prediksi = await modelAI.classify(gambarFrame);
+                    
+                    if (prediksi && prediksi.length > 0) {
+                        // Ambil nama benda yang memiliki tingkat akurasi tertinggi
+                        const namaBenda = prediksi[0].className; 
+                        const akurasi = Math.round(prediksi[0].probability * 100); 
+                        
+                        // Tampilkan teks hasil
+                        elemenHasil.innerText = `Terdeteksi: ${namaBenda} (${akurasi}%)`;
+                        bicara(`Mendeteksi ${namaBenda}`);
+
+                        // MEMBUAT LINK GOOGLE PENCARIAN
+                        // Kita tambahkan teks tambahan agar Google mencari penjelasan dalam bahasa Indonesia
+                        const kataKunciPencarian = namaBenda + " penjelasan benda terjemahan bahasa indonesia";
+                        
+                        // Fungsi encodeURIComponent mengubah spasi menjadi kode yang bisa dibaca URL browser (seperti %20)
+                        const linkGoogle = "https://www.google.com/search?q=" + encodeURIComponent(kataKunciPencarian);
+                        
+                        // Masukkan link tersebut ke dalam tombol Google
+                        tombolGoogle.href = linkGoogle;
+                        tombolGoogle.innerText = `2. Cari "${namaBenda}" di Google`;
+                        
+                        // Tampilkan tombol Google ke layar
+                        tombolGoogle.style.display = 'inline-block';
+
+                    } else {
+                        elemenHasil.innerText = "Tidak mengenali objek.";
+                    }
+                    
+                    tombolDeteksi.disabled = false; 
+                };
+
+            } catch (error) {
+                elemenHasil.innerText = "Kesalahan teknis saat menganalisis.";
+                tombolDeteksi.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            nyalakanKamera();
+            muatModelAI();
+        });
+
+        tombolDeteksi.addEventListener('click', deteksiObjek);
+    </script>
+</body>
+</html>
