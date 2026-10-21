@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <!-- Meta tag ini sangat penting agar tampilan responsif di HP (Android/iOS) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pendeteksi Objek AI Multi-Platform</title>
+    
+    <!-- Memuat TensorFlow.js dan model MobileNet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@latest"></script>
+
+    <style>
+        /* CSS Responsif untuk berbagai perangkat */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 10px; 
+            background-color: #f0f2f5; 
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: #1a1a1a; font-size: clamp(20px, 5vw, 28px); margin-bottom: 5px;}
+        
+        .penjelasan { 
+            font-size: clamp(12px, 3vw, 14px); 
+            color: #666; 
+            max-width: 500px; 
+            margin: 5px 15px 15px 15px; 
+            line-height: 1.4; 
+        }
+        
+        /* Kontainer Video agar menyesuaikan layar */
+        .video-container {
+            width: 100%;
+            max-width: 480px; /* Maksimal lebar untuk tampilan desktop/tablet */
+            position: relative;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 15px;
+        }
+
+        video { 
+            width: 100%; 
+            display: block;
+            /* Object-fit memastikan video tidak gepeng */
+            object-fit: cover; 
+        }
+        
+        /* Gambar dan Kanvas disembunyikan */
+        img#gambarFrame, canvas#kanvasFoto { display: none; } 
+        
+        /* Desain Tombol yang ramah sentuhan (Touch-friendly) */
+        button { 
+            padding: 15px 30px; 
+            font-size: clamp(16px, 4vw, 18px); 
+            font-weight: bold;
+            cursor: pointer; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+            width: 90%;
+            max-width: 400px;
+            transition: background-color 0.3s;
+        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #cccccc; box-shadow: none; cursor: not-allowed; }
+        
+        #hasil { 
+            font-size: clamp(18px, 4.5vw, 22px); 
+            font-weight: bold; 
+            margin-top: 20px; 
+            color: #2c3e50; 
+            min-height: 40px;
+            padding: 0 15px;
+        }
+        
+        #status-ai { 
+            font-size: 14px; 
+            color: #d35400; 
+            font-style: italic; 
+            margin-bottom: 15px;
+            padding: 5px 10px;
+            background: #fdf2e9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pendeteksi Objek Universal 📷</h1>
+    <p class="penjelasan">
+        Dapat dibuka di Android, iOS, Windows, dan Mac. <br>
+        Ini adalah versi lokal (tanpa API Key) yang mendeteksi objek umum (Bahasa Inggris).
+    </p>
+
+    <div id="status-ai">Mengunduh model AI...</div>
+
+    <div class="video-container">
+        <!-- Aturan playsinline sangat penting agar video berjalan mulus di iOS/iPhone -->
+        <video id="kamera" autoplay playsinline></video>
+    </div>
+    
+    <canvas id="kanvasFoto"></canvas>
+    <img id="gambarFrame" src="" alt="Frame Kamera">
+    
+    <button id="tombolDeteksi" disabled>Menyiapkan AI...</button>
+
+    <div id="hasil">Silakan tunggu...</div>
+
+    <script>
+        const elemenKamera = document.getElementById('kamera');
+        const kanvasFoto = document.getElementById('kanvasFoto');
+        const contextKanvas = kanvasFoto.getContext('2d');
+        const gambarFrame = document.getElementById('gambarFrame');
+        
+        const tombolDeteksi = document.getElementById('tombolDeteksi');
+        const elemenHasil = document.getElementById('hasil');
+        const statusAI = document.getElementById('status-ai');
+
+        let modelAI;
+
+        async function nyalakanKamera() {
+            try {
+                // Di Safari/iOS, video: true kadang lebih stabil dari facingMode jika error.
+                // Namun kita utamakan facingMode environment (kamera belakang)
+                const constraints = {
+                    video: { facingMode: 'environment' },
+                    audio: false
+                };
+                
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                elemenKamera.srcObject = stream;
+            } catch (error) {
+                console.error("Error kamera:", error);
+                elemenHasil.innerText = "Kamera diblokir. Mohon izinkan akses kamera di browser Anda.";
+            }
+        }
+
+        async function muatModelAI() {
+            try {
+                modelAI = await mobilenet.load();
+                statusAI.innerText = "✅ AI Siap Digunakan!";
+                statusAI.style.color = "#155724";
+                statusAI.style.backgroundColor = "#d4edda";
+                
+                tombolDeteksi.innerText = "Deteksi Objek!";
+                tombolDeteksi.disabled = false; 
+                elemenHasil.innerText = "Arahkan kamera dan klik tombol.";
+            } catch (error) {
+                console.error("Gagal memuat AI:", error);
+                statusAI.innerText = "❌ Gagal memuat AI. Pastikan internet Anda aktif.";
+                statusAI.style.color = "#721c24";
+                statusAI.style.backgroundColor = "#f8d7da";
+            }
+        }
+
+        function bicara(teks) {
+            if ('speechSynthesis' in window) {
+                const ucapan = new SpeechSynthesisUtterance(teks);
+                ucapan.lang = 'id-ID'; 
+                window.speechSynthesis.speak(ucapan);
+            }
+        }
+
+        async function deteksiObjek() {
+            if (!modelAI) return;
+
+            tombolDeteksi.disabled = true;
+            elemenHasil.innerText = "Menganalisis... ⏳";
+
+            try {
+                kanvasFoto.width = elemenKamera.videoWidth;
+                kanvasFoto.height = elemenKamera.videoHeight;
+                
+                contextKanvas.drawImage(elemenKamera, 0, 0, kanvasFoto.width, kanvasFoto.height);
+                gambarFrame.src = kanvasFoto.toDataURL('image/jpeg');
+
+                gambarFrame.onload = async () => {
+                    const prediksi = await modelAI.classify(gambarFrame);
+                    
+                    if (prediksi && prediksi.length > 0) {
+                        const namaBenda = prediksi[0].className; 
+                        const akurasi = Math.round(prediksi[0].probability * 100); 
+                        
+                        elemenHasil.innerText = `Terdeteksi: ${namaBenda} (${akurasi}%)`;
+                        bicara(`Mendeteksi ${namaBenda}`);
+                    } else {
+                        elemenHasil.innerText = "Tidak mengenali objek.";
+                    }
+                    
+                    tombolDeteksi.disabled = false; 
+                };
+
+            } catch (error) {
+                console.error("Error deteksi:", error);
+                elemenHasil.innerText = "Kesalahan teknis saat menganalisis.";
+                tombolDeteksi.disabled = false;
+            }
+        }
+
+        // Jalankan fungsi saat web dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            nyalakanKamera();
+            muatModelAI();
+        });
+
+        tombolDeteksi.addEventListener('click', deteksiObjek);
+    </script>
+</body>
+</html>
