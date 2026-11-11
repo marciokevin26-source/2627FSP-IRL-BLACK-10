@@ -1,773 +1,204 @@
-```react
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Plus, 
-  Folder, 
-  Globe, 
-  Code, 
-  Smartphone, 
-  Tablet, 
-  Monitor, 
-  ExternalLink, 
-  Trash2, 
-  Edit3, 
-  Search, 
-  Moon, 
-  Sun, 
-  Play, 
-  FileCode, 
-  Sparkles, 
-  Layers, 
-  X, 
-  Check, 
-  Eye, 
-  RefreshCw,
-  Download,
-  Copy,
-  Maximize2
-} from 'lucide-react';
-
-// Preset sample projects to populate on first load
-const PRESET_PROJECTS = [
-  {
-    id: 'preset-1',
-    title: 'Interactive Canvas Paint',
-    description: 'A miniature HTML5 canvas drawing app built entirely in one HTML file.',
-    category: 'Interactive',
-    type: 'file',
-    url: '',
-    htmlContent: `<!DOCTYPE html>
-<html lang="en">
+```html
+<!DOCTYPE html>
+<html lang="id" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paint App</title>
-  <style>
-    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-    .toolbar { padding: 12px; background: #1e293b; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #334155; }
-    button { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-    button:hover { background: #2563eb; }
-    button.clear { background: #ef4444; }
-    button.clear:hover { background: #dc2626; }
-    input[type="color"] { border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; background: transparent; }
-    input[type="range"] { accent-color: #3b82f6; }
-    canvas { flex: 1; cursor: crosshair; background: #020617; touch-action: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Proyek - Marcio Kevin</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+        }
+    </style>
 </head>
-<body>
-  <div class="toolbar">
-    <label>Color: <input type="color" id="colorPicker" value="#38bdf8"></label>
-    <label>Size: <input type="range" id="sizePicker" min="1" max="50" value="5"></label>
-    <button class="clear" id="clearBtn">Clear Canvas</button>
-    <span style="margin-left: auto; font-size: 0.85rem; color: #94a3b8;">Draw on the black canvas below!</span>
-  </div>
-  <canvas id="canvas"></canvas>
-  <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const colorPicker = document.getElementById('colorPicker');
-    const sizePicker = document.getElementById('sizePicker');
-    const clearBtn = document.getElementById('clearBtn');
-    let drawing = false;
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
-    function resize() {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-    }
-    window.addEventListener('resize', resize);
-    resize();
+    <!-- Background Decorative Glows -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+    <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-slow" style="animation-delay: 2s;"></div>
 
-    function startDraw(e) {
-      drawing = true;
-      draw(e);
-    }
-    function stopDraw() {
-      drawing = false;
-      ctx.beginPath();
-    }
-    function draw(e) {
-      if(!drawing) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = (e.clientX || e.touches[0].clientX) - rect.left;
-      const y = (e.clientY || e.touches[0].clientY) - rect.top;
-      ctx.lineWidth = sizePicker.value;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = colorPicker.value;
-      ctx.lineTo(x, y);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-    }
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-blue-500/30">
+                    MK
+                </div>
+                <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                    Marcio Kevin
+                </span>
+            </div>
+            <nav class="flex items-center gap-4">
+                <a href="#projects" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Proyek</a>
+                <a href="https://github.com/marciokevin26-source" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white transition-all flex items-center gap-2">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    <span>GitHub</span>
+                </a>
+            </nav>
+        </div>
+    </header>
 
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mouseup', stopDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('touchstart', startDraw);
-    canvas.addEventListener('touchend', stopDraw);
-    canvas.addEventListener('touchmove', draw);
-    clearBtn.addEventListener('click', () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
-  </script>
-</body>
-</html>`,
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'preset-2',
-    title: 'Glowing Neumorphic Clock',
-    description: 'A stylish neon digital clock widget with animation effects.',
-    category: 'Widget',
-    type: 'file',
-    url: '',
-    htmlContent: `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Digital Clock</title>
-  <style>
-    body {
-      margin: 0; min-height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; background: #090d16;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff;
-    }
-    .clock-card {
-      background: rgba(30, 41, 59, 0.7);
-      padding: 40px 60px;
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-      text-align: center;
-    }
-    .time {
-      font-size: 4rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
-    }
-    .date {
-      font-size: 1.1rem;
-      color: #94a3b8;
-      margin-top: 10px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-    }
-  </style>
-</head>
-<body>
-  <div class="clock-card">
-    <div class="time" id="clock">00:00:00</div>
-    <div class="date" id="date">Loading date...</div>
-  </div>
-  <script>
-    function updateClock() {
-      const now = new Date();
-      const hrs = String(now.getHours()).padStart(2, '0');
-      const mins = String(now.getMinutes()).padStart(2, '0');
-      const secs = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = \`\${hrs}:\${mins}:\${secs}\`;
-      
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('date').textContent = now.toLocaleDateString('en-US', options);
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
-</body>
-</html>`,
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'preset-3',
-    title: 'Tailwind CSS Documentation',
-    description: 'External documentation link for quick reference.',
-    category: 'Documentation',
-    type: 'url',
-    url: 'https://tailwindcss.com',
-    htmlContent: '',
-    createdAt: new Date().toISOString()
-  }
-];
-
-const CATEGORIES = ['All', 'Interactive', 'Widget', 'Web App', 'Portfolio', 'Documentation', 'Other'];
-
-export default function App() {
-  const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem('html_hub_projects');
-    return saved ? JSON.parse(saved) : PRESET_PROJECTS;
-  });
-
-  const [activeProjectId, setActiveProjectId] = useState(() => {
-    return projects.length > 0 ? projects[0].id : null;
-  });
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [viewportMode, setViewportMode] = useState('desktop'); // desktop, tablet, mobile
-  const [darkMode, setDarkMode] = useState(true);
-  
-  // Modals state
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditCodeOpen, setIsEditCodeOpen] = useState(false);
-  
-  // New Project Form State
-  const [newTitle, setNewTitle] = useState('');
-  const [newDesc, setNewDesc] = useState('');
-  const [newCategory, setNewCategory] = useState('Web App');
-  const [newType, setNewType] = useState('file'); // 'file' or 'url'
-  const [newUrl, setNewUrl] = useState('');
-  const [newHtmlContent, setNewHtmlContent] = useState('');
-  const [fileName, setFileName] = useState('');
-
-  // Active Project Code Editing State
-  const [editingHtml, setEditingHtml] = useState('');
-
-  const iframeRef = useRef(null);
-
-  // Sync projects to localStorage
-  useEffect(() => {
-    localStorage.setItem('html_hub_projects', JSON.stringify(projects));
-  }, [projects]);
-
-  // Active project helper
-  const activeProject = projects.find(p => p.id === activeProjectId) || projects[0];
-
-  // Set editable content when active project changes or modal opens
-  useEffect(() => {
-    if (activeProject && activeProject.type === 'file') {
-      setEditingHtml(activeProject.htmlContent || '');
-    }
-  }, [activeProjectId, activeProject]);
-
-  // Handle File Upload for New Project
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFileName(file.name);
-      if (!newTitle) {
-        setNewTitle(file.name.replace('.html', '').replace('.htm', ''));
-      }
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setNewHtmlContent(event.target.result);
-      };
-      reader.readAsText(file);
-    }
-  };
-
-  // Add Project Submit
-  const handleAddProject = (e) => {
-    e.preventDefault();
-    if (!newTitle.trim()) return;
-
-    const newProj = {
-      id: Date.now().toString(),
-      title: newTitle,
-      description: newDesc,
-      category: newCategory,
-      type: newType,
-      url: newType === 'url' ? (newUrl.startsWith('http') ? newUrl : `https://${newUrl}`) : '',
-      htmlContent: newType === 'file' ? newHtmlContent : '',
-      createdAt: new Date().toISOString()
-    };
-
-    setProjects([newProj, ...projects]);
-    setActiveProjectId(newProj.id);
-
-    // Reset Form
-    setNewTitle('');
-    setNewDesc('');
-    setNewCategory('Web App');
-    setNewType('file');
-    setNewUrl('');
-    setNewHtmlContent('');
-    setFileName('');
-    setIsAddModalOpen(false);
-  };
-
-  // Delete Project
-  const handleDeleteProject = (id, e) => {
-    e.stopPropagation();
-    const filtered = projects.filter(p => p.id !== id);
-    setProjects(filtered);
-    if (activeProjectId === id) {
-      setActiveProjectId(filtered.length > 0 ? filtered[0].id : null);
-    }
-  };
-
-  // Save edited code in Code Modal
-  const handleSaveCode = () => {
-    if (!activeProject) return;
-    const updated = projects.map(p => {
-      if (p.id === activeProject.id) {
-        return { ...p, htmlContent: editingHtml };
-      }
-      return p;
-    });
-    setProjects(updated);
-    setIsEditCodeOpen(false);
-  };
-
-  // Filter Projects
-  const filteredProjects = projects.filter(p => {
-    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          p.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  return (
-    <div className={`flex h-screen w-screen overflow-hidden ${darkMode ? 'bg-slate-950 text-slate-100 dark' : 'bg-slate-100 text-slate-800'}`}>
-      
-      {/* SIDEBAR: Project List & Navigation */}
-      <aside className="w-80 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col flex-shrink-0 z-10">
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
         
-        {/* App Header */}
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/30">
-              <Code className="w-5 h-5" />
+        <!-- Hero Section -->
+        <section class="text-center py-12 md:py-20 relative">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-6">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+                Showcase Proyek Web
             </div>
-            <div>
-              <h1 className="font-bold text-base tracking-tight leading-none">HTML Preview Hub</h1>
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Link & Code Workspace</span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-3xl mx-auto">
+                Koleksi Proyek <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Interactive Web</span>
+            </h1>
+            <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto font-normal">
+                Jelajahi dan jalankan demo proyek berbasis web secara langsung. Klik tombol di setiap kartu untuk membuka aplikasi.
+            </p>
+        </section>
+
+        <!-- Projects Grid Section -->
+        <section id="projects" class="py-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Daftar Proyek</h2>
+                    <p class="text-slate-400 text-sm mt-1">Pilih salah satu proyek di bawah ini untuk melihat demo.</p>
+                </div>
+                <span class="text-xs font-semibold px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-slate-300">
+                    2 Proyek Ditemukan
+                </span>
             </div>
-          </div>
-          <button 
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition"
-            title="Toggle theme"
-          >
-            {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-        </div>
 
-        {/* Action Button */}
-        <div className="p-4">
-          <button 
-            onClick={() => setIsAddModalOpen(true)}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-xl shadow-lg shadow-blue-600/20 transition active:scale-[0.98]"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Project / Link</span>
-          </button>
-        </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Project Card 1: Scanner -->
+                <div class="glass-card rounded-2xl p-6 md:p-8 flex flex-col justify-between transition-all duration-300 group hover:-translate-y-1">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <i data-lucide="qr-code" class="w-6 h-6"></i>
+                            </div>
+                            <span class="px-3 py-1 text-xs font-medium bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-md">
+                                HTML / Web App
+                            </span>
+                        </div>
 
-        {/* Search & Category Filter */}
-        <div className="px-4 pb-3 space-y-2.5">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="Search projects..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none text-xs">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-2.5 py-1 rounded-md font-medium whitespace-nowrap transition ${
-                  selectedCategory === cat 
-                    ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400' 
-                    : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Project List Items */}
-        <div className="flex-1 overflow-y-auto px-3 space-y-1">
-          {filteredProjects.length === 0 ? (
-            <div className="text-center py-8 text-slate-400 text-xs">
-              No projects found.
-            </div>
-          ) : (
-            filteredProjects.map(project => {
-              const isActive = project.id === activeProjectId;
-              return (
-                <div 
-                  key={project.id}
-                  onClick={() => setActiveProjectId(project.id)}
-                  className={`group relative p-3 rounded-xl cursor-pointer transition-all border ${
-                    isActive 
-                      ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800/60 shadow-sm' 
-                      : 'border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/50'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      {project.type === 'file' ? (
-                        <FileCode className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                      ) : (
-                        <Globe className="w-4 h-4 text-sky-500 flex-shrink-0" />
-                      )}
-                      <h3 className="font-semibold text-sm truncate text-slate-800 dark:text-slate-200">
-                        {project.title}
-                      </h3>
+                        <h3 class="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                            Scanner Project
+                        </h3>
+                        <p class="text-slate-400 mt-3 text-sm leading-relaxed">
+                            Aplikasi pemindaian interaktif berbasis web. Dirancang untuk memberikan pengalaman pemindaian cepat dan responsif langsung dari peramban Anda.
+                        </p>
                     </div>
 
-                    <button
-                      onClick={(e) => handleDeleteProject(project.id, e)}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-500 rounded transition"
-                      title="Delete project"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-
-                  {project.description && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">
-                      {project.description}
-                    </p>
-                  )}
-
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                      {project.category}
-                    </span>
-                    <span className="text-[10px] text-slate-400">
-                      {project.type === 'file' ? 'HTML File' : 'External Link'}
-                    </span>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Footer Info */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-400 text-center">
-          {projects.length} {projects.length === 1 ? 'Project' : 'Projects'} Saved
-        </div>
-      </aside>
-
-      {/* MAIN VIEWPORT: Live HTML / Website Viewer */}
-      <main className="flex-1 flex flex-col min-w-0 bg-slate-100 dark:bg-slate-950">
-        
-        {activeProject ? (
-          <>
-            {/* Top Preview Control Bar */}
-            <header className="h-14 px-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4 flex-shrink-0">
-              
-              {/* Active Info */}
-              <div className="flex items-center gap-3 min-w-0">
-                <div>
-                  <h2 className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">
-                    {activeProject.title}
-                  </h2>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-400 flex items-center gap-1">
-                      {activeProject.type === 'file' ? <FileCode className="w-3 h-3 text-emerald-500" /> : <Globe className="w-3 h-3 text-sky-500" />}
-                      {activeProject.type === 'file' ? 'Embedded Canvas' : activeProject.url}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Viewport Resizer Controls */}
-              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
-                <button
-                  onClick={() => setViewportMode('desktop')}
-                  className={`p-1.5 rounded ${viewportMode === 'desktop' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-                  title="Desktop View (100%)"
-                >
-                  <Monitor className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewportMode('tablet')}
-                  className={`p-1.5 rounded ${viewportMode === 'tablet' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-                  title="Tablet View (768px)"
-                >
-                  <Tablet className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewportMode('mobile')}
-                  className={`p-1.5 rounded ${viewportMode === 'mobile' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-                  title="Mobile View (375px)"
-                >
-                  <Smartphone className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Right Side Tools */}
-              <div className="flex items-center gap-2">
-                {activeProject.type === 'file' && (
-                  <button
-                    onClick={() => {
-                      setEditingHtml(activeProject.htmlContent);
-                      setIsEditCodeOpen(true);
-                    }}
-                    className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 transition"
-                  >
-                    <Code className="w-3.5 h-3.5" />
-                    <span>View / Edit Code</span>
-                  </button>
-                )}
-
-                {activeProject.type === 'url' && (
-                  <a
-                    href={activeProject.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/60 rounded-lg transition"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    <span>Open in New Tab</span>
-                  </a>
-                )}
-              </div>
-            </header>
-
-            {/* Content Area / Frame Container */}
-            <div className="flex-1 p-4 flex justify-center items-center overflow-auto relative">
-              <div 
-                className={`h-full transition-all duration-300 flex flex-col rounded-xl overflow-hidden border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl ${
-                  viewportMode === 'desktop' 
-                    ? 'w-full' 
-                    : viewportMode === 'tablet' 
-                    ? 'w-[768px] max-w-full' 
-                    : 'w-[375px] max-w-full'
-                }`}
-              >
-                {/* Visual Browser Toolbar Header */}
-                <div className="h-8 bg-slate-200 dark:bg-slate-800 px-3 flex items-center justify-between border-b border-slate-300 dark:border-slate-700/60">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500 inline-block"></span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>
-                  </div>
-                  <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 truncate max-w-xs px-2 py-0.5 bg-white/50 dark:bg-slate-900/50 rounded">
-                    {activeProject.type === 'url' ? activeProject.url : 'sandbox://local-html-project'}
-                  </div>
-                  <div className="w-12"></div>
+                    <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-2 text-xs text-slate-400">
+                            <i data-lucide="code-2" class="w-4 h-4"></i>
+                            <span>2627FSP-IRL-BLACK-10</span>
+                        </div>
+                        
+                        <a href="https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Scanner.html" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/25 transition-all transform active:scale-95">
+                            <span>Buka Scanner</span>
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    </div>
                 </div>
 
-                {/* Live Preview Iframe */}
-                <div className="flex-1 w-full h-full relative bg-white">
-                  {activeProject.type === 'file' ? (
-                    <iframe
-                      key={activeProject.id + activeProject.htmlContent?.length}
-                      ref={iframeRef}
-                      srcDoc={activeProject.htmlContent}
-                      title={activeProject.title}
-                      className="w-full h-full border-0"
-                      sandbox="allow-scripts allow-modals allow-forms allow-same-origin"
-                    />
-                  ) : (
-                    <iframe
-                      src={activeProject.url}
-                      title={activeProject.title}
-                      className="w-full h-full border-0"
-                      sandbox="allow-scripts allow-same-origin allow-forms"
-                    />
-                  )}
+                <!-- Project Card 2: Halo -->
+                <div class="glass-card rounded-2xl p-6 md:p-8 flex flex-col justify-between transition-all duration-300 group hover:-translate-y-1">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                <i data-lucide="sparkles" class="w-6 h-6"></i>
+                            </div>
+                            <span class="px-3 py-1 text-xs font-medium bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 rounded-md">
+                                HTML / Interactive
+                            </span>
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">
+                            Halo Project
+                        </h3>
+                        <p class="text-slate-400 mt-3 text-sm leading-relaxed">
+                            Aplikasi interaktif "Halo" yang menampilkan komponen visual dan fitur UI berbasis web yang menarik dan responsif.
+                        </p>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-2 text-xs text-slate-400">
+                            <i data-lucide="code-2" class="w-4 h-4"></i>
+                            <span>2627FSP-IRL-BLACK-10</span>
+                        </div>
+                        
+                        <a href="https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Halo.html" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm shadow-lg shadow-indigo-600/25 transition-all transform active:scale-95">
+                            <span>Buka Halo</span>
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    </div>
                 </div>
-              </div>
+
             </div>
-          </>
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-            <div className="p-4 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-400 mb-4">
-              <Layers className="w-8 h-8" />
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 glass-card mt-16 py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p class="text-slate-400 text-sm">
+                © 2026 Marcio Kevin. Semua hak cipta dilindungi.
+            </p>
+            <div class="flex items-center gap-6">
+                <a href="https://github.com/marciokevin26-source" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 text-sm">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    <span>GitHub Profile</span>
+                </a>
             </div>
-            <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">No Project Selected</h3>
-            <p className="text-sm text-slate-400 max-w-sm mt-1">Select a project from the sidebar or click "Add Project" to upload your own HTML file or link.</p>
-          </div>
-        )}
-      </main>
-
-      {/* MODAL 1: ADD NEW PROJECT */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
-            <button 
-              onClick={() => setIsAddModalOpen(false)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-1">Add New Project</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">Embed a standalone HTML file or connect an external project URL.</p>
-
-            <form onSubmit={handleAddProject} className="space-y-4">
-              {/* Type Switcher */}
-              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
-                <button
-                  type="button"
-                  onClick={() => setNewType('file')}
-                  className={`flex items-center justify-center gap-2 py-2 text-xs font-semibold rounded-lg transition ${
-                    newType === 'file' 
-                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' 
-                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                  }`}
-                >
-                  <FileCode className="w-4 h-4" />
-                  <span>Upload .html File</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setNewType('url')}
-                  className={`flex items-center justify-center gap-2 py-2 text-xs font-semibold rounded-lg transition ${
-                    newType === 'url' 
-                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' 
-                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                  }`}
-                >
-                  <Globe className="w-4 h-4" />
-                  <span>External Web Link</span>
-                </button>
-              </div>
-
-              {/* Title */}
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Project Title</label>
-                <input 
-                  type="text"
-                  required
-                  placeholder="e.g. My Portfolio Webpage"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Category</label>
-                <select
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {CATEGORIES.filter(c => c !== 'All').map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Description</label>
-                <textarea 
-                  rows="2"
-                  placeholder="Short overview of what this project does..."
-                  value={newDesc}
-                  onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                />
-              </div>
-
-              {/* Dynamic Input (File vs URL) */}
-              {newType === 'file' ? (
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Select .html File</label>
-                  <label className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-xl p-4 cursor-pointer bg-slate-50 dark:bg-slate-800/40 transition">
-                    <FileCode className="w-8 h-8 text-blue-500 mb-1" />
-                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                      {fileName ? fileName : 'Click to upload or drag HTML file here'}
-                    </span>
-                    <span className="text-[10px] text-slate-400 mt-1">Supports raw .html, .htm</span>
-                    <input 
-                      type="file" 
-                      accept=".html,.htm" 
-                      onChange={handleFileUpload} 
-                      className="hidden" 
-                    />
-                  </label>
-                </div>
-              ) : (
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">URL / Link</label>
-                  <input 
-                    type="url"
-                    required
-                    placeholder="https://example.com"
-                    value={newUrl}
-                    onChange={(e) => setNewUrl(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              )}
-
-              {/* Submit Buttons */}
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md shadow-blue-500/20 transition"
-                >
-                  Add Project
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
-      )}
+    </footer>
 
-      {/* MODAL 2: CODE EDITOR / VIEWER */}
-      {isEditCodeOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full h-[80vh] flex flex-col shadow-2xl overflow-hidden relative">
-            
-            {/* Header */}
-            <div className="px-5 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-              <div className="flex items-center gap-2">
-                <Code className="w-4 h-4 text-emerald-400" />
-                <h3 className="font-semibold text-sm text-slate-200">
-                  Edit HTML Source Code - {activeProject?.title}
-                </h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleSaveCode}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition"
-                >
-                  <Check className="w-3.5 h-3.5" />
-                  <span>Apply & Save</span>
-                </button>
-                <button 
-                  onClick={() => setIsEditCodeOpen(false)}
-                  className="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Code Textarea */}
-            <div className="flex-1 p-4 bg-slate-950">
-              <textarea 
-                value={editingHtml}
-                onChange={(e) => setEditingHtml(e.target.value)}
-                className="w-full h-full font-mono text-xs bg-transparent text-emerald-300 focus:outline-none resize-none leading-relaxed"
-                spellCheck="false"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
-}
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
 ```
