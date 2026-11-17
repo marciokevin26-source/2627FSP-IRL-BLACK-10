@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Kevin Marcio Irwanto</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #e9e9e9;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .cv-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        /* Sidebar Kiri (Hitam) */
+        .sidebar {
+            width: 35%;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 40px 30px;
+        }
+        .sidebar h3 {
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            margin-top: 35px;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .sidebar h3:first-child {
+            margin-top: 0;
+        }
+        .contact-info, .personal-info, .skills {
+            margin-bottom: 20px;
+        }
+        .contact-info p, .personal-info p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-info p strong, .personal-info p strong {
+            font-size: 0.85rem;
+            color: #aaaaaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .skills ul {
+            list-style-type: none;
+        }
+        .skills ul li {
+            background-color: #333333;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Konten Utama Kanan (Putih) */
+        .main-content {
+            width: 65%;
+            background-color: #ffffff;
+            padding: 50px;
+        }
+        .header {
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #000000;
+            line-height: 1.2;
+        }
+        .header h2 {
+            font-size: 1.1rem;
+            color: #666666;
+            font-weight: 400;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .section {
+            margin-bottom: 35px;
+        }
+        .section h3 {
+            font-size: 1.3rem;
+            color: #000000;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: inline-block;
+        }
+        .section p {
+            font-size: 1rem;
+            color: #333333;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        .education-item, .experience-item {
+            margin-bottom: 20px;
+        }
+        .education-item h4, .experience-item h4 {
+            font-size: 1.1rem;
+            color: #000000;
+            margin-bottom: 5px;
+        }
+        .education-item span, .experience-item span {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Responsif untuk layar HP */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .cv-container {
+                flex-direction: column;
+            }
+            .sidebar, .main-content {
+                width: 100%;
+            }
+            .sidebar {
+                padding: 30px 20px;
+            }
+            .main-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cv-container">
+    <!-- Kolom Kiri (Hitam) -->
+    <div class="sidebar">
+        <h3>Kontak</h3>
+        <div class="contact-info">
+            <p><strong>Telepon</strong> 0899-8051-950</p>
+            <p><strong>Email</strong> marciokevin26@gmail.com</p>
+        </div>
+
+        <h3>Data Pribadi</h3>
+        <div class="personal-info">
+            <p><strong>Tempat, Tgl Lahir</strong> Bandung, 26 September 2011</p>
+            <p><strong>Umur</strong> 15 Tahun</p>
+            <p><strong>Golongan Darah</strong> O</p>
+        </div>
+
+        <h3>Kemampuan</h3>
+        <div class="skills">
+            <ul>
+                <li>Kreatif</li>
+                <li>Teamwork</li>
+                <li>Design</li>
+                <li>Cooking</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Kolom Kanan (Putih) -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Kevin Marcio Irwanto</h1>
+            <h2>Lulusan Baru</h2>
+        </div>
+
+        <div class="section">
+            <h3>Profil</h3>
+            <p>Saya memiliki keahlian dalam beberapa hal, contohnya dalam kreativitas. Saya memiliki kreativitas dalam beberapa hal, seperti dalam membuat PPT di aplikasi Canva. Saya juga dapat membantu dalam kerjasama atau teamwork agar pekerjaan kelompok dapat terlaksana dan terselesaikan dengan baik. Selain itu, saya memiliki hobi dalam hal memasak.</p>
+        </div>
+
+        <div class="section">
+            <h3>Pengalaman</h3>
+            <div class="experience-item">
+                <h4>Ekstrakurikuler Memasak</h4>
+                <p>Mengikuti eskul memasak selama 3 tahun.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Pendidikan</h3>
+            <div class="education-item">
+                <h4>SMA BPK Holis</h4>
+                <span>2026 - 2029</span>
+            </div>
+            <div class="education-item">
+                <h4>SMP BPK Holis</h4>
+                <span>2023 - 2026</span>
+            </div>
+            <div class="education-item">
+                <h4>SDK 1</h4>
+                <span>2020 - 2023</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
