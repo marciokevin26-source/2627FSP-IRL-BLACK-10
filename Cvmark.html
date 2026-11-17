@@ -1,0 +1,408 @@
+```html
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Markenzie Haziel</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans (dengan fallback sistem untuk offline) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Pengaturan khusus untuk mode cetak / Save as PDF */
+        @media print {
+            @page {
+                size: A4;
+                margin: 12mm;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .cv-container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                border: 2px solid #000000 !important;
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            /* Memastikan warna tetap hitam putih tajam saat dicetak meskipun sedang dalam Dark Mode */
+            .dark .cv-container,
+            .dark .cv-container * {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                border-color: #000000 !important;
+            }
+            .dark .badge-invert {
+                background-color: #000000 !important;
+                color: #ffffff !important;
+            }
+        }
+
+        /* Transisi halus saat mengganti tema */
+        body, .cv-container, .theme-border, .theme-card {
+            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+    </style>
+</head>
+<body class="bg-neutral-100 dark:bg-neutral-950 text-black dark:text-white font-sans antialiased min-h-screen py-6 px-4 sm:py-10 sm:px-6">
+
+    <!-- Panel Kontrol Atas (Disembunyikan saat dicetak) -->
+    <div class="no-print max-w-4xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-3 sm:p-4 shadow-sm">
+        <div class="flex items-center gap-2">
+            <span class="inline-block w-3 h-3 rounded-full bg-black dark:bg-white"></span>
+            <span class="text-xs sm:text-sm font-bold uppercase tracking-wider">Curriculum Vitae • Mode Pratinjau</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
+            <!-- Tombol Ganti Tema -->
+            <button id="themeToggleBtn" onclick="toggleTheme()" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wide rounded-lg border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer">
+                <!-- Ikon Matahari / Bulan -->
+                <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                </svg>
+                <svg id="themeIconMoon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <span>Ubah Tema (Hitam/Putih)</span>
+            </button>
+
+            <!-- Tombol Cetak / Simpan PDF -->
+            <button onclick="window.print()" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wide rounded-lg border-2 border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:opacity-85 transition-opacity cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Print / Simpan PDF</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Kontainer Utama CV -->
+    <main class="cv-container max-w-4xl mx-auto bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] overflow-hidden">
+        
+        <!-- HEADER: Nama, Peran & Kontak -->
+        <header class="p-6 sm:p-10 border-b-2 border-black dark:border-white">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <div>
+                    <div class="inline-block px-3 py-1 mb-3 text-xs font-extrabold uppercase tracking-widest border border-black dark:border-white rounded-md">
+                        CURRICULUM VITAE
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-black tracking-tight uppercase leading-none">
+                        MARKENZIE HAZIEL
+                    </h1>
+                    <p class="mt-2 text-base sm:text-lg font-bold tracking-widest uppercase text-neutral-700 dark:text-neutral-300">
+                        HIGH SCHOOL STUDENT
+                    </p>
+                </div>
+
+                <!-- Informasi Kontak -->
+                <div class="flex flex-col gap-2 text-sm font-medium md:text-right">
+                    <a href="mailto:markenzie2103@gmail.com" class="inline-flex items-center md:justify-end gap-2 hover:underline">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
+                        <span>markenzie2103@gmail.com</span>
+                    </a>
+                    <a href="tel:+6282295052960" class="inline-flex items-center md:justify-end gap-2 hover:underline">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span>+62 822 9505 2960</span>
+                    </a>
+                    <div class="inline-flex items-center md:justify-end gap-2">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>TKI 1, Block N, No. 35</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- BODY: Grid 2 Kolom Responsif -->
+        <div class="grid grid-cols-1 md:grid-cols-12">
+            
+            <!-- KOLOM KIRI (Biodata, Keahlian, Bahasa) -->
+            <aside class="md:col-span-5 p-6 sm:p-8 border-b-2 md:border-b-0 md:border-r-2 border-black dark:border-white space-y-8">
+                
+                <!-- Bagian: About Me -->
+                <section>
+                    <h2 class="text-sm font-black uppercase tracking-widest pb-2 mb-4 border-b-2 border-black dark:border-white flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>About Me</span>
+                    </h2>
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex justify-between items-baseline border-b border-neutral-300 dark:border-neutral-800 pb-1.5">
+                            <dt class="font-bold uppercase text-xs tracking-wider text-neutral-600 dark:text-neutral-400">Age</dt>
+                            <dd class="font-semibold">15</dd>
+                        </div>
+                        <div class="flex justify-between items-baseline border-b border-neutral-300 dark:border-neutral-800 pb-1.5">
+                            <dt class="font-bold uppercase text-xs tracking-wider text-neutral-600 dark:text-neutral-400">Date of Birth</dt>
+                            <dd class="font-semibold">21/03/2011</dd>
+                        </div>
+                        <div class="flex justify-between items-baseline border-b border-neutral-300 dark:border-neutral-800 pb-1.5">
+                            <dt class="font-bold uppercase text-xs tracking-wider text-neutral-600 dark:text-neutral-400">Religion</dt>
+                            <dd class="font-semibold">Christian</dd>
+                        </div>
+                        <div class="pt-0.5">
+                            <dt class="font-bold uppercase text-xs tracking-wider text-neutral-600 dark:text-neutral-400 mb-1.5">Interests</dt>
+                            <dd class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs font-semibold border border-black dark:border-white rounded-md">Music (Singing)</span>
+                                <span class="px-2.5 py-1 text-xs font-semibold border border-black dark:border-white rounded-md">Games</span>
+                                <span class="px-2.5 py-1 text-xs font-semibold border border-black dark:border-white rounded-md">IT</span>
+                            </dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <!-- Bagian: Skills -->
+                <section>
+                    <h2 class="text-sm font-black uppercase tracking-widest pb-2 mb-4 border-b-2 border-black dark:border-white flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        <span>Skills</span>
+                    </h2>
+
+                    <div class="space-y-4">
+                        <!-- Soft Skills -->
+                        <div>
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-2">Soft Skills</h3>
+                            <ul class="space-y-1.5 text-sm font-medium">
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-black dark:bg-white rounded-full"></span>
+                                    <span>Communication</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-black dark:bg-white rounded-full"></span>
+                                    <span>Time Management</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-black dark:bg-white rounded-full"></span>
+                                    <span>Organization</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Technical Skills -->
+                        <div>
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-2">Technical Skills</h3>
+                            <ul class="space-y-1.5 text-sm font-medium">
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-black dark:bg-white rounded-full"></span>
+                                    <span>Research</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-black dark:bg-white rounded-full"></span>
+                                    <span>Computer Literacy</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bagian: Languages -->
+                <section>
+                    <h2 class="text-sm font-black uppercase tracking-widest pb-2 mb-4 border-b-2 border-black dark:border-white flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        <span>Languages</span>
+                    </h2>
+                    <div class="space-y-2.5 text-sm">
+                        <div class="flex items-center justify-between p-2.5 border border-black dark:border-white rounded-lg">
+                            <span class="font-bold">Indonesian</span>
+                            <span class="badge-invert px-2 py-0.5 text-xs font-bold uppercase bg-black dark:bg-white text-white dark:text-black rounded">Fluent</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 border border-black dark:border-white rounded-lg">
+                            <span class="font-bold">English</span>
+                            <span class="badge-invert px-2 py-0.5 text-xs font-bold uppercase bg-black dark:bg-white text-white dark:text-black rounded">Fluent</span>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+
+            <!-- KOLOM KANAN (Pengalaman & Prestasi, Pendidikan) -->
+            <div class="md:col-span-7 p-6 sm:p-8 space-y-8">
+                
+                <!-- Bagian: Experience & Achievements -->
+                <section>
+                    <h2 class="text-sm font-black uppercase tracking-widest pb-2 mb-5 border-b-2 border-black dark:border-white flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                        <span>Experience & Achievements</span>
+                    </h2>
+
+                    <div class="space-y-4">
+                        <!-- Prestasi 1: IKMC -->
+                        <article class="theme-card p-4 sm:p-5 border-2 border-black dark:border-white rounded-xl">
+                            <div class="flex flex-wrap items-start justify-between gap-2 mb-1.5">
+                                <h3 class="text-base sm:text-lg font-extrabold tracking-tight">
+                                    IKMC (International Kangaroo Mathematics Contest)
+                                </h3>
+                                <span class="badge-invert px-2.5 py-1 text-xs font-bold bg-black dark:bg-white text-white dark:text-black rounded-md shrink-0">
+                                    2023, 2024, 2025
+                                </span>
+                            </div>
+                            <p class="text-sm font-bold text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
+                                <span class="inline-block w-2 h-2 border-2 border-black dark:border-white rounded-full"></span>
+                                <span>Silver Medal (3 times)</span>
+                            </p>
+                        </article>
+
+                        <!-- Prestasi 2: IKSC -->
+                        <article class="theme-card p-4 sm:p-5 border-2 border-black dark:border-white rounded-xl">
+                            <div class="flex flex-wrap items-start justify-between gap-2 mb-1.5">
+                                <h3 class="text-base sm:text-lg font-extrabold tracking-tight">
+                                    IKSC (International Kangaroo Science Contest)
+                                </h3>
+                                <span class="badge-invert px-2.5 py-1 text-xs font-bold bg-black dark:bg-white text-white dark:text-black rounded-md shrink-0">
+                                    2025
+                                </span>
+                            </div>
+                            <p class="text-sm font-bold text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
+                                <span class="inline-block w-2 h-2 border-2 border-black dark:border-white rounded-full"></span>
+                                <span>Silver Medal</span>
+                            </p>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- Bagian: Education -->
+                <section>
+                    <h2 class="text-sm font-black uppercase tracking-widest pb-2 mb-5 border-b-2 border-black dark:border-white flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                        <span>Education</span>
+                    </h2>
+
+                    <!-- Timeline Pendidikan -->
+                    <div class="relative pl-6 border-l-2 border-black dark:border-white space-y-6 ml-2">
+                        
+                        <!-- SMPK -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-black dark:bg-white border-2 border-white dark:border-black ring-2 ring-black dark:ring-white"></span>
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <h3 class="text-base font-extrabold uppercase">SMPK BPK PENABUR HOLIS</h3>
+                                <span class="text-xs font-bold px-2.5 py-0.5 border border-black dark:border-white rounded-md">
+                                    2023 – 2025
+                                </span>
+                            </div>
+                            <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-1">Junior High School</p>
+                        </div>
+
+                        <!-- SDK -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-white dark:bg-black border-2 border-black dark:border-white"></span>
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <h3 class="text-base font-extrabold uppercase">SDK BPK PENABUR HOLIS</h3>
+                                <span class="text-xs font-bold px-2.5 py-0.5 border border-black dark:border-white rounded-md">
+                                    2017 – 2023
+                                </span>
+                            </div>
+                            <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-1">Elementary School</p>
+                        </div>
+
+                        <!-- TKK -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full bg-white dark:bg-black border-2 border-black dark:border-white"></span>
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <h3 class="text-base font-extrabold uppercase">TKK BPK PENABUR HOLIS</h3>
+                                <span class="text-xs font-bold px-2.5 py-0.5 border border-black dark:border-white rounded-md">
+                                    2015 – 2017
+                                </span>
+                            </div>
+                            <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-1">Kindergarten</p>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="px-6 py-4 border-t-2 border-black dark:border-white flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-semibold text-neutral-600 dark:text-neutral-400">
+            <span>MARKENZIE HAZIEL — CURRICULUM VITAE</span>
+            <span>Bandung, Indonesia</span>
+        </footer>
+
+    </main>
+
+    <!-- Script Pengaturan Tema & Penyimpanan Lokal (Offline-ready) -->
+    <script>
+        // Memuat preferensi tema dari localStorage saat halaman dibuka
+        (function initTheme() {
+            try {
+                const savedTheme = localStorage.getItem('cv_theme_markenzie');
+                const htmlEl = document.documentElement;
+                if (savedTheme === 'dark') {
+                    htmlEl.classList.add('dark');
+                    htmlEl.classList.remove('light');
+                } else {
+                    htmlEl.classList.add('light');
+                    htmlEl.classList.remove('dark');
+                }
+            } catch (e) {
+                console.warn('LocalStorage tidak tersedia:', e);
+            }
+        })();
+
+        // Fungsi untuk mengganti antara Light Mode (Putih) dan Dark Mode (Hitam)
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const isDark = htmlEl.classList.contains('dark');
+            
+            if (isDark) {
+                htmlEl.classList.remove('dark');
+                htmlEl.classList.add('light');
+                try { localStorage.setItem('cv_theme_markenzie', 'light'); } catch (e) {}
+            } else {
+                htmlEl.classList.remove('light');
+                htmlEl.classList.add('dark');
+                try { localStorage.setItem('cv_theme_markenzie', 'dark'); } catch (e) {}
+            }
+        }
+    </script>
+</body>
+</html>
+```
