@@ -1,0 +1,1029 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV - King Reinhart Jevan Austin</title>
+  <style>
+    /* ==========================================================================
+       1. RESET & VARIABEL TEMA MONOKROM (HITAM & PUTIH)
+       Menggunakan sistem font bawaan agar 100% berjalan sempurna saat offline.
+       ========================================================================== */
+    :root {
+      --bg-page: #e5e5e5;
+      --bg-white: #ffffff;
+      --bg-black: #0f0f0f;
+      --bg-black-soft: #1c1c1c;
+      --text-black: #111111;
+      --text-gray: #4a4a4a;
+      --text-light-gray: #b5b5b5;
+      --text-white: #ffffff;
+      --border-light: #e0e0e0;
+      --border-dark: #333333;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-black);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 20px 12px 60px;
+    }
+
+    /* ==========================================================================
+       2. TOOLBAR INTERAKTIF (TIDAK IKUT TERCETAK)
+       ========================================================================== */
+    .toolbar {
+      max-width: 900px;
+      margin: 0 auto 20px;
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      padding: 12px 18px;
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .toolbar-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      display: inline-block;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .btn-white {
+      background-color: var(--bg-white);
+      color: var(--text-black);
+    }
+
+    .btn-white:hover {
+      background-color: #dcdcdc;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--text-white);
+      border-color: #555555;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--bg-black-soft);
+      border-color: var(--text-white);
+    }
+
+    .btn-outline.active {
+      background-color: var(--bg-white);
+      color: var(--text-black);
+      border-color: var(--bg-white);
+    }
+
+    /* ==========================================================================
+       3. NOTIFIKASI TOAST (PENGGANTI ALERT)
+       ========================================================================== */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid #444;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       4. LEMBAR UTAMA CV (DUA KOLOM MONOKROM)
+       ========================================================================== */
+    .cv-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: var(--bg-white);
+      border-radius: 14px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+      border: 1px solid #d4d4d4;
+    }
+
+    /* --- KOLOM KIRI (SIDEBAR HITAM PEKAT) --- */
+    .sidebar {
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      padding: 40px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .avatar-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .monogram {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background-color: var(--bg-white);
+      color: var(--text-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      border: 3px solid #444444;
+    }
+
+    .sidebar-name-mobile {
+      display: none;
+    }
+
+    .sidebar-section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-light-gray);
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
+
+    .info-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background-color: var(--bg-black-soft);
+      border: 1px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info-icon svg {
+      width: 15px;
+      height: 15px;
+      color: var(--text-white);
+    }
+
+    .info-content {
+      display: flex;
+      flex-direction: column;
+      word-break: break-word;
+    }
+
+    .info-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-light-gray);
+    }
+
+    .info-value {
+      color: var(--text-white);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    a.info-value:hover {
+      text-decoration: underline;
+    }
+
+    /* Keahlian di Sidebar */
+    .skills-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .skill-card {
+      background-color: var(--bg-black-soft);
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .skill-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      letter-spacing: 0.5px;
+    }
+
+    .skill-desc {
+      font-size: 0.8rem;
+      color: var(--text-light-gray);
+      line-height: 1.4;
+    }
+
+    .skill-bar {
+      height: 4px;
+      background-color: #333333;
+      border-radius: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background-color: var(--bg-white);
+      border-radius: 4px;
+    }
+
+    /* --- KOLOM KANAN (AREA UTAMA PUTIH BERSIH) --- */
+    .main-content {
+      background-color: var(--bg-white);
+      color: var(--text-black);
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .header-block {
+      border-bottom: 2px solid var(--text-black);
+      padding-bottom: 22px;
+    }
+
+    .full-name {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      color: var(--text-black);
+      margin-bottom: 8px;
+    }
+
+    .role-badge {
+      display: inline-block;
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 6px;
+    }
+
+    .section-block {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 8px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-black);
+    }
+
+    .section-title svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .profile-text {
+      font-size: 0.96rem;
+      color: var(--text-gray);
+      text-align: justify;
+      line-height: 1.7;
+    }
+
+    /* Timeline Pendidikan & Pengalaman */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding-left: 16px;
+      border-left: 2px solid var(--text-black);
+      margin-left: 6px;
+      margin-top: 4px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 14px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -23px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--bg-white);
+      border: 3px solid var(--text-black);
+    }
+
+    .timeline-period {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background-color: #f2f2f2;
+      color: var(--text-black);
+      border: 1px solid #d4d4d4;
+      padding: 2px 10px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-black);
+    }
+
+    .timeline-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-gray);
+    }
+
+    /* Kotak Pengalaman & Tombol Tambah */
+    .experience-empty {
+      background-color: #fafafa;
+      border: 1px dashed #bdbdbd;
+      border-radius: 10px;
+      padding: 18px 20px;
+      color: var(--text-gray);
+      font-size: 0.9rem;
+    }
+
+    .add-exp-btn {
+      background-color: var(--bg-black);
+      color: var(--text-white);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .add-exp-btn:hover {
+      background-color: #333333;
+    }
+
+    /* Gaya saat Mode Edit Aktif */
+    body.edit-mode [contenteditable="true"] {
+      outline: 1.5px dashed #888888;
+      background-color: rgba(128, 128, 128, 0.12);
+      border-radius: 4px;
+      padding: 2px 5px;
+      transition: background-color 0.2s;
+    }
+
+    body.edit-mode [contenteditable="true"]:focus {
+      outline: 2px solid #ffffff;
+      background-color: rgba(255, 255, 255, 0.18);
+    }
+
+    body.edit-mode .main-content [contenteditable="true"]:focus {
+      outline: 2px solid #000000;
+      background-color: #f4f4f4;
+    }
+
+    /* ==========================================================================
+       5. RESPONSIF UNTUK TABLET & PONSEL
+       ========================================================================== */
+    @media (max-width: 768px) {
+      body {
+        padding: 12px 10px 40px;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+
+      .toolbar-info {
+        justify-content: center;
+      }
+
+      .toolbar-actions {
+        justify-content: center;
+      }
+
+      .cv-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        padding: 32px 24px;
+      }
+
+      .sidebar-name-mobile {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-top: 4px;
+      }
+
+      .main-content {
+        padding: 32px 24px;
+      }
+
+      .full-name {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* ==========================================================================
+       6. ATURAN CETAK / SIMPAN PDF (@MEDIA PRINT)
+       Memastikan hasil cetak A4 presisi, bersih, dan mempertahankan kontras
+       ========================================================================== */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      body {
+        background-color: #ffffff;
+        padding: 0;
+        margin: 0;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .toolbar,
+      .toast,
+      .no-print {
+        display: none !important;
+      }
+
+      .cv-container {
+        max-width: 100%;
+        width: 100%;
+        min-height: 297mm;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        grid-template-columns: 300px 1fr !important;
+      }
+
+      .sidebar {
+        background-color: #0f0f0f !important;
+        color: #ffffff !important;
+        padding: 36px 24px;
+      }
+
+      .sidebar-name-mobile {
+        display: none !important;
+      }
+
+      .main-content {
+        padding: 36px 32px;
+      }
+
+      [contenteditable="true"] {
+        outline: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOOLBAR KONTROL INTERAKTIF (TERSEMBUNYI SAAT DICETAK) -->
+  <div class="toolbar no-print" role="region" aria-label="Kontrol CV">
+    <div class="toolbar-info">
+      <span class="status-dot"></span>
+      <span id="modeStatusText">Mode Pratinjau • Siap Online &amp; Offline</span>
+    </div>
+    <div class="toolbar-actions">
+      <button type="button" class="btn btn-outline" id="btnToggleEdit" onclick="toggleEditMode()">
+        <!-- Ikon Pensil SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+        </svg>
+        <span id="editBtnLabel">Edit Teks</span>
+      </button>
+
+      <button type="button" class="btn btn-outline" onclick="downloadOfflineHTML()">
+        <!-- Ikon Unduh SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Simpan Offline (.HTML)</span>
+      </button>
+
+      <button type="button" class="btn btn-white" onclick="printCV()">
+        <!-- Ikon Printer SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        <span>Cetak / Simpan PDF</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- KARTU UTAMA CURRICULUM VITAE -->
+  <main class="cv-container" id="cvDocument">
+    
+    <!-- KOLOM KIRI: SIDEBAR HITAM -->
+    <aside class="sidebar">
+      
+      <!-- Inisial Monogram -->
+      <div class="avatar-box">
+        <div class="monogram" id="monogramInitials" aria-hidden="true">KR</div>
+        <div class="sidebar-name-mobile">King Reinhart Jevan Austin</div>
+      </div>
+
+      <!-- Bagian Kontak -->
+      <div>
+        <h2 class="sidebar-section-title">Kontak</h2>
+        <ul class="info-list">
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <!-- Ikon Telepon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Telepon / WhatsApp</span>
+              <span class="info-value editable" data-key="phone">0856-2436-0270</span>
+            </div>
+          </li>
+
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <!-- Ikon Email -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Email</span>
+              <span class="info-value editable" data-key="email">kingnaustin@gmail.com</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Bagian Data Pribadi -->
+      <div>
+        <h2 class="sidebar-section-title">Data Pribadi</h2>
+        <ul class="info-list">
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <!-- Ikon Kalender / Lahir -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Tempat, Tanggal Lahir</span>
+              <span class="info-value editable" data-key="birth">Bandung, 18 November 2010</span>
+            </div>
+          </li>
+
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <!-- Ikon User / Umur -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Umur</span>
+              <span class="info-value editable" data-key="age">15 Tahun</span>
+            </div>
+          </li>
+
+          <li class="info-item">
+            <div class="info-icon" aria-hidden="true">
+              <!-- Ikon Golongan Darah -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Golongan Darah</span>
+              <span class="info-value editable" data-key="blood">Gol. B</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Bagian Kemampuan / Keahlian -->
+      <div>
+        <h2 class="sidebar-section-title">Kemampuan</h2>
+        <ul class="skills-list">
+          <li class="skill-card">
+            <div class="skill-header">
+              <span class="skill-name editable" data-key="skill1Title">KREATIF</span>
+            </div>
+            <p class="skill-desc editable" data-key="skill1Desc">Pembuatan materi presentasi (PPT) yang menarik menggunakan aplikasi Canva.</p>
+            <div class="skill-bar" aria-hidden="true">
+              <div class="skill-fill" style="width: 90%;"></div>
+            </div>
+          </li>
+
+          <li class="skill-card">
+            <div class="skill-header">
+              <span class="skill-name editable" data-key="skill2Title">TEAMWORK</span>
+            </div>
+            <p class="skill-desc editable" data-key="skill2Desc">Mampu berkolaborasi aktif dalam kerja sama tim untuk menyelesaikan tugas kelompok secara optimal.</p>
+            <div class="skill-bar" aria-hidden="true">
+              <div class="skill-fill" style="width: 92%;"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- KOLOM KANAN: AREA UTAMA PUTIH -->
+    <section class="main-content">
+      
+      <!-- Header Nama & Status -->
+      <header class="header-block">
+        <h1 class="full-name editable" id="cvFullName" data-key="fullName">King Reinhart Jevan Austin</h1>
+        <span class="role-badge editable" data-key="roleBadge">Pelajar / Lulusan Baru</span>
+      </header>
+
+      <!-- Bagian Profil -->
+      <div class="section-block">
+        <div class="section-heading">
+          <h2 class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Profil</span>
+          </h2>
+        </div>
+        <p class="profile-text editable" data-key="profileSummary">
+          Saya memiliki keahlian dalam beberapa hal, contohnya dalam kreativitas seperti membuat presentasi (PPT) di aplikasi Canva. Saya juga mampu berkontribusi dengan baik dalam kerja sama tim (teamwork) agar pekerjaan kelompok dapat terlaksana dan terselesaikan secara optimal.
+        </p>
+      </div>
+
+      <!-- Bagian Riwayat Pendidikan -->
+      <div class="section-block">
+        <div class="section-heading">
+          <h2 class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            <span>Pendidikan</span>
+          </h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-period editable" data-key="edu1Year">2026 - 2029</span>
+            <h3 class="timeline-title editable" data-key="edu1School">SMA BPK Holis</h3>
+            <p class="timeline-subtitle editable" data-key="edu1Desc">Sekolah Menengah Atas</p>
+          </div>
+
+          <div class="timeline-item">
+            <span class="timeline-period editable" data-key="edu2Year">2023 - 2026</span>
+            <h3 class="timeline-title editable" data-key="edu2School">SMP BPK Holis</h3>
+            <p class="timeline-subtitle editable" data-key="edu2Desc">Sekolah Menengah Pertama</p>
+          </div>
+
+          <div class="timeline-item">
+            <span class="timeline-period editable" data-key="edu3Year">2020 - 2023</span>
+            <h3 class="timeline-title editable" data-key="edu3School">SD Kalkud</h3>
+            <p class="timeline-subtitle editable" data-key="edu3Desc">Sekolah Dasar</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian Pengalaman -->
+      <div class="section-block">
+        <div class="section-heading">
+          <h2 class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+            <span>Pengalaman</span>
+          </h2>
+          <button type="button" class="add-exp-btn no-print" onclick="addExperienceItem()">
+            + Tambah Pengalaman
+          </button>
+        </div>
+
+        <div id="experienceContainer">
+          <div class="experience-empty" id="experiencePlaceholder">
+            <p class="editable" data-key="expNote">
+              Belum memiliki pengalaman kerja formal (Lulusan Baru). Siap belajar, berkontribusi aktif dalam proyek tim, dan mengembangkan keterampilan kreatif.
+            </p>
+          </div>
+          <div class="timeline" id="experienceList" style="display: none;"></div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- NOTIFIKASI TOAST -->
+  <div class="toast no-print" id="toastNotification" role="status" aria-live="polite"></div>
+
+  <script>
+    /* ==========================================================================
+       LOGIKA INTERAKTIF CV (EDIT LANGSUNG, PENYIMPANAN LOKAL, CETAK & UNDUH)
+       ========================================================================== */
+    let isEditMode = false;
+    const STORAGE_KEY = "cv_king_reinhart_data_v1";
+
+    // Menampilkan pesan notifikasi singkat
+    function showToast(message) {
+      const toast = document.getElementById("toastNotification");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // Mengaktifkan / Menonaktifkan Mode Edit Teks
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const body = document.body;
+      const btn = document.getElementById("btnToggleEdit");
+      const btnLabel = document.getElementById("editBtnLabel");
+      const statusText = document.getElementById("modeStatusText");
+      const editables = document.querySelectorAll(".editable");
+
+      if (isEditMode) {
+        body.classList.add("edit-mode");
+        btn.classList.add("active");
+        btnLabel.textContent = "Selesai Edit";
+        statusText.textContent = "Mode Edit Aktif • Klik teks mana saja untuk mengubah";
+        editables.forEach(el => el.setAttribute("contenteditable", "true"));
+        showToast("Mode edit aktif. Klik teks pada CV untuk mengubah isinya.");
+      } else {
+        body.classList.remove("edit-mode");
+        btn.classList.remove("active");
+        btnLabel.textContent = "Edit Teks";
+        statusText.textContent = "Perubahan Tersimpan • Siap Dicetak / Offline";
+        editables.forEach(el => el.removeAttribute("contenteditable"));
+        updateMonogram();
+        saveToLocalStorage();
+        showToast("Perubahan berhasil disimpan.");
+      }
+    }
+
+    // Memperbarui inisial monogram otomatis jika nama diubah
+    function updateMonogram() {
+      const fullNameEl = document.getElementById("cvFullName");
+      const monogramEl = document.getElementById("monogramInitials");
+      if (!fullNameEl || !monogramEl) return;
+
+      const words = fullNameEl.textContent.trim().split(/\s+/);
+      if (words.length >= 2) {
+        monogramEl.textContent = (words[0][0] + words[1][0]).toUpperCase();
+      } else if (words.length === 1 && words[0].length > 0) {
+        monogramEl.textContent = words[0].substring(0, 2).toUpperCase();
+      }
+    }
+
+    // Menambahkan item pengalaman baru ke daftar
+    function addExperienceItem() {
+      const placeholder = document.getElementById("experiencePlaceholder");
+      const list = document.getElementById("experienceList");
+
+      if (placeholder) {
+        placeholder.style.display = "none";
+      }
+      list.style.display = "flex";
+
+      const item = document.createElement("div");
+      item.className = "timeline-item";
+      item.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <span class="timeline-period editable" ${isEditMode ? 'contenteditable="true"' : ''}>2026</span>
+          <button type="button" class="no-print" onclick="removeExperienceItem(this)" style="background:none; border:none; color:#666; cursor:pointer; font-size:0.75rem; text-decoration:underline;">Hapus</button>
+        </div>
+        <h3 class="timeline-title editable" ${isEditMode ? 'contenteditable="true"' : ''}>Kegiatan / Proyek Sekolah</h3>
+        <p class="timeline-subtitle editable" ${isEditMode ? 'contenteditable="true"' : ''}>Membuat desain presentasi kelompok menggunakan Canva dan berkoordinasi bersama anggota tim.</p>
+      `;
+
+      list.appendChild(item);
+
+      if (!isEditMode) {
+        toggleEditMode();
+      }
+      saveToLocalStorage();
+      showToast("Kolom pengalaman ditambahkan. Silakan ubah teksnya.");
+    }
+
+    // Menghapus item pengalaman
+    function removeExperienceItem(btnEl) {
+      const item = btnEl.closest(".timeline-item");
+      const list = document.getElementById("experienceList");
+      const placeholder = document.getElementById("experiencePlaceholder");
+
+      if (item) item.remove();
+
+      if (list.children.length === 0) {
+        list.style.display = "none";
+        if (placeholder) placeholder.style.display = "block";
+      }
+      saveToLocalStorage();
+      showToast("Item pengalaman dihapus.");
+    }
+
+    // Menyimpan perubahan ke localStorage browser agar tetap ada saat dibuka kembali offline
+    function saveToLocalStorage() {
+      try {
+        const data = {};
+        document.querySelectorAll("[data-key]").forEach(el => {
+          data[el.getAttribute("data-key")] = el.innerHTML;
+        });
+        data.customExperiences = document.getElementById("experienceList").innerHTML;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {
+        // Abaikan jika penyimpanan dibatasi browser
+      }
+    }
+
+    // Memuat data tersimpan saat halaman dibuka
+    function loadFromLocalStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        document.querySelectorAll("[data-key]").forEach(el => {
+          const key = el.getAttribute("data-key");
+          if (data[key] !== undefined) {
+            el.innerHTML = data[key];
+          }
+        });
+
+        if (data.customExperiences && data.customExperiences.trim() !== "") {
+          const list = document.getElementById("experienceList");
+          const placeholder = document.getElementById("experiencePlaceholder");
+          list.innerHTML = data.customExperiences;
+          if (list.children.length > 0) {
+            list.style.display = "flex";
+            if (placeholder) placeholder.style.display = "none";
+          }
+        }
+        updateMonogram();
+      } catch (e) {
+        // Gunakan nilai bawaan jika gagal memuat
+      }
+    }
+
+    // Mencetak atau menyimpan CV sebagai PDF
+    function printCV() {
+      if (isEditMode) {
+        toggleEditMode();
+      }
+      window.print();
+    }
+
+    // Mengunduh file HTML lengkap beserta perubahan terbaru untuk dipakai offline
+    function downloadOfflineHTML() {
+      if (isEditMode) {
+        toggleEditMode();
+      }
+      const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "CV_King_Reinhart_Jevan_Austin.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("File HTML berhasil diunduh untuk penggunaan offline.");
+    }
+
+    // Inisialisasi saat halaman selesai dimuat
+    window.addEventListener("DOMContentLoaded", () => {
+      loadFromLocalStorage();
+    });
+  </script>
+</body>
+</html>
+```
