@@ -1,0 +1,997 @@
+```html
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Kue Bulan 2026 | SMAK BPK PENABUR Holis</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        imperial: {
+                            deep: '#4A0404',
+                            crimson: '#7A0000',
+                            red: '#A80000',
+                            bright: '#D31010',
+                            gold: '#E5C158',
+                            goldDark: '#B8860B',
+                            goldLight: '#FFF2B2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        chinese: ['Ma Shan Zheng', 'cursive'],
+                        serif: ['Cinzel', 'serif'],
+                        decorative: ['Cinzel Decorative', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #4A0404;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5C158;
+            border-radius: 4px;
+        }
+
+        /* Red & Gold Texture Overlay */
+        .bg-pattern-red {
+            background-color: #5E0303;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(168, 0, 0, 0.6) 0%, rgba(74, 4, 4, 0.95) 100%),
+                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e5c158' fill-opacity='0.08'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40zM0 40h20v20H0V40zm20 20h20v20H20V60zm40-40h20v20H60V20zm-20 0h20v20H40V20z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Paper Cut Layers */
+        .paper-shadow {
+            filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.6));
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF2B2 0%, #E5C158 50%, #996515 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border-glow {
+            box-shadow: 0 0 20px rgba(229, 193, 88, 0.4), inset 0 0 15px rgba(229, 193, 88, 0.2);
+        }
+
+        .moon-glow-red {
+            box-shadow: 0 0 60px 15px rgba(255, 242, 178, 0.5), 0 0 120px 40px rgba(229, 193, 88, 0.25);
+        }
+
+        /* Floating Cloud Keyframes */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-10px) translateX(6px); }
+        }
+        .animate-cloud {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+        .animate-cloud-reverse {
+            animation: floatSlow 7s ease-in-out infinite reverse;
+        }
+
+        /* Rotation for 3D Mooncake badge */
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(229,193,88,0.5)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 30px rgba(255,242,178,0.8)); }
+        }
+        .animate-mooncake {
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        /* Chinese Huizi Pattern Border SVG generator background */
+        .huizi-border {
+            border: 6px solid #E5C158;
+            border-image: repeating-linear-gradient(45deg, #E5C158, #E5C158 10px, #7A0000 10px, #7A0000 20px) 20;
+        }
+
+        /* Music Equalizer Bar Animation */
+        .eq-bar {
+            width: 3px;
+            background-color: #E5C158;
+            animation: eqAnim 1s ease-in-out infinite alternate;
+        }
+        .eq-bar:nth-child(1) { height: 16px; animation-delay: 0.1s; }
+        .eq-bar:nth-child(2) { height: 24px; animation-delay: 0.3s; }
+        .eq-bar:nth-child(3) { height: 12px; animation-delay: 0.5s; }
+        .eq-bar:nth-child(4) { height: 20px; animation-delay: 0.2s; }
+        
+        @keyframes eqAnim {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1); }
+        }
+        .eq-paused .eq-bar {
+            animation: none;
+            height: 6px !important;
+        }
+    </style>
+</head>
+<body class="bg-pattern-red text-slate-100 font-sans antialiased selection:bg-amber-400 selection:text-red-950 overflow-x-hidden">
+
+    <canvas id="lantern-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- Floating Traditional Chinese Music Audio Control -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="music-btn" onclick="toggleMusic()" class="flex items-center space-x-3 px-4 py-3 rounded-full bg-imperial-deep/90 border-2 border-imperial-gold/70 text-imperial-gold shadow-2xl backdrop-blur-md hover:bg-imperial-crimson transition-all transform hover:scale-105 active:scale-95 group">
+            <div id="eq-container" class="flex items-center space-x-1 h-6 eq-paused">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+            <span id="music-status-text" class="text-xs font-bold uppercase tracking-wider font-serif">Musik Pentatonik: OFF</span>
+            <i id="music-icon" class="fa-solid fa-music text-amber-300"></i>
+        </button>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-imperial-deep/90 backdrop-blur-md border-b border-imperial-gold/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-600 via-imperial-gold to-yellow-200 border-2 border-amber-300 flex items-center justify-center text-imperial-deep font-bold text-2xl shadow-lg shadow-amber-500/20 font-chinese">
+                    中
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold tracking-widest text-imperial-gold font-decorative">MID-AUTUMN FESTIVAL</h1>
+                    <p class="text-xs text-amber-200/90 font-medium tracking-wide">SMAK BPK PENABUR Holis</p>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold tracking-wide">
+                <a href="#beranda" class="text-imperial-gold hover:text-amber-200 transition-colors">Beranda</a>
+                <a href="#kutipan-keberuntungan" class="text-amber-100/90 hover:text-imperial-gold transition-colors">Potong Kue Bulan</a>
+                <a href="#hanzi" class="text-amber-100/90 hover:text-imperial-gold transition-colors">Kamus Hanzi</a>
+                <a href="#lomba" class="text-amber-100/90 hover:text-imperial-gold transition-colors">Kompetisi</a>
+                <a href="#harapan" class="text-amber-100/90 hover:text-imperial-gold transition-colors">Lampion Harapan</a>
+                <a href="#lokasi" class="text-amber-100/90 hover:text-imperial-gold transition-colors">Lokasi & Jadwal</a>
+            </nav>
+
+            <a href="#lomba" class="hidden sm:inline-flex items-center px-5 py-2.5 rounded-full bg-gradient-to-r from-imperial-gold via-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-imperial-deep font-extrabold text-sm transition-all transform hover:scale-105 shadow-xl shadow-imperial-gold/20 border border-amber-200">
+                <i class="fa-solid fa-trophy mr-2"></i> Daftar Lomba
+            </a>
+
+            <!-- Mobile menu button -->
+            <button id="menu-btn" class="md:hidden text-imperial-gold text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-imperial-deep border-b border-imperial-gold/30 px-6 py-4 space-y-3 font-medium">
+            <a href="#beranda" class="block text-imperial-gold">Beranda</a>
+            <a href="#kutipan-keberuntungan" class="block text-amber-100 hover:text-imperial-gold">Interaktif: Potong Kue Bulan</a>
+            <a href="#hanzi" class="block text-amber-100 hover:text-imperial-gold">Kamus Hanzi Interaktif</a>
+            <a href="#lomba" class="block text-amber-100 hover:text-imperial-gold">Kompetisi Bento & Storytelling</a>
+            <a href="#harapan" class="block text-amber-100 hover:text-imperial-gold">Lampion Harapan</a>
+            <a href="#lokasi" class="block text-amber-100 hover:text-imperial-gold">Lokasi & Acara</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="relative min-h-screen pt-24 pb-16 flex items-center justify-center overflow-hidden z-10">
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- LEFT side: Traditional Circular Window with Moon, Pagoda, Silhouette & Auspicious Red Clouds (Matching reference image) -->
+                <div class="lg:col-span-6 relative flex justify-center items-center">
+                    
+                    <!-- Main Frame Outer Container -->
+                    <div class="relative w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] md:w-[480px] md:h-[480px] rounded-full flex items-center justify-center p-3 paper-shadow">
+                        
+                        <!-- Outer Decorative Patterned Circle (Huizi Pattern Ornament) -->
+                        <div class="absolute inset-0 rounded-full border-8 border-imperial-gold/80 bg-imperial-crimson/80 flex items-center justify-center shadow-2xl">
+                            <div class="w-full h-full rounded-full border-4 border-dashed border-amber-300/40 opacity-70"></div>
+                        </div>
+
+                        <!-- Secondary Inner Red & Gold Rings -->
+                        <div class="absolute inset-4 rounded-full border-4 border-imperial-gold bg-gradient-to-br from-imperial-crimson via-red-950 to-black overflow-hidden flex items-center justify-center">
+                            
+                            <!-- Glowing Realistic Moon inside Window -->
+                            <div class="absolute top-6 right-12 w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr from-amber-200 via-yellow-100 to-white moon-glow-red opacity-95">
+                                <div class="absolute top-4 left-5 w-8 h-8 rounded-full bg-amber-200/30 blur-xs"></div>
+                                <div class="absolute bottom-6 right-8 w-12 h-12 rounded-full bg-amber-300/20 blur-sm"></div>
+                            </div>
+
+                            <!-- Pagoda & Mountain Silhouettes (Paper-Cut Style SVG) -->
+                            <svg class="absolute bottom-0 w-full h-full" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Distant Mountains -->
+                                <path d="M0 420 L120 280 L220 360 L350 220 L500 450 L500 500 L0 500 Z" fill="#3D0000" opacity="0.8"/>
+                                <path d="M50 450 L180 320 L280 400 L420 260 L500 480 L0 500 Z" fill="#500000" opacity="0.9"/>
+                                
+                                <!-- Pine Trees & Pagoda -->
+                                <!-- Pagoda Base and Roofs -->
+                                <g fill="#D4AF37" stroke="#3D0000" stroke-width="2">
+                                    <!-- Floor 1 -->
+                                    <path d="M70 420 L130 420 L125 380 L75 380 Z"/>
+                                    <path d="M60 380 L140 380 L120 365 L80 365 Z"/>
+                                    <!-- Floor 2 -->
+                                    <path d="M75 365 L125 365 L120 335 L80 335 Z"/>
+                                    <path d="M65 335 L135 335 L115 320 L85 320 Z"/>
+                                    <!-- Floor 3 / Spire -->
+                                    <path d="M82 320 L118 320 L112 295 L88 295 Z"/>
+                                    <path d="M72 295 L128 295 L100 265 Z"/>
+                                    <path d="M100 265 L100 240" stroke="#FFF2B2" stroke-width="4"/>
+                                </g>
+
+                                <!-- Pine Tree Silhouettes -->
+                                <path d="M20 480 Q40 430 50 380 Q20 400 10 420 Z" fill="#2B0000"/>
+                                <path d="M130 480 Q160 410 170 360 Q140 380 120 410 Z" fill="#2B0000"/>
+                            </svg>
+
+                            <!-- Red Gold Cloud Overlays (Xiangyun - Auspicious Clouds paper cut effect) -->
+                            <div class="absolute -bottom-4 -left-6 w-56 h-36 animate-cloud paper-shadow">
+                                <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 80 Q 0 80 0 60 Q 0 40 20 40 Q 30 10 60 20 Q 90 0 120 20 Q 150 10 160 40 Q 180 40 180 60 Q 180 80 160 80 Q 140 100 100 95 Q 50 100 20 80 Z" fill="#A80000" stroke="#E5C158" stroke-width="4"/>
+                                    <path d="M40 65 Q 60 50 90 60" stroke="#E5C158" stroke-width="3" fill="none"/>
+                                </svg>
+                            </div>
+
+                            <div class="absolute -bottom-2 -right-6 w-60 h-40 animate-cloud-reverse paper-shadow">
+                                <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 80 Q 0 80 0 60 Q 0 40 20 40 Q 30 10 60 20 Q 90 0 120 20 Q 150 10 160 40 Q 180 40 180 60 Q 180 80 160 80 Q 140 100 100 95 Q 50 100 20 80 Z" fill="#7A0000" stroke="#E5C158" stroke-width="4"/>
+                                    <path d="M50 65 Q 80 45 120 60" stroke="#FFF2B2" stroke-width="3" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- RIGHT side: Title, Mooncake Graphic Emblem & Countdown (Matching visual hierarchy of prompt image) -->
+                <div class="lg:col-span-6 text-center lg:text-left space-y-6">
+                    
+                    <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-imperial-gold/10 border border-imperial-gold/40 text-imperial-gold text-xs font-bold uppercase tracking-widest">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                        <span>SMAK BPK PENABUR Holis Bandung</span>
+                    </div>
+
+                    <!-- Main Title Header with Chinese Calligraphy -->
+                    <div>
+                        <span class="block text-imperial-gold font-chinese text-5xl sm:text-7xl mb-1 tracking-wider drop-shadow-md">
+                            中秋佳节
+                        </span>
+                        <h1 class="text-4xl sm:text-6xl font-black font-decorative tracking-tight gold-gradient-text leading-tight uppercase">
+                            MOONCAKE FESTIVAL
+                        </h1>
+                        <p class="text-amber-200/90 text-sm sm:text-base font-serif tracking-widest mt-1 uppercase font-semibold">
+                            Festival Pertengahan Musim Gugur 2026
+                        </p>
+                    </div>
+
+                    <p class="text-amber-100/90 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
+                        Sambut momen kehangatan tradisi, kilau bulan purnama, serta indahnya kebersamaan di kampus <strong class="text-imperial-gold font-semibold">SMAK BPK PENABUR Holis</strong>.
+                    </p>
+
+                    <!-- Interactive Golden Mooncake Medallion Badge (As seen on right side of prompt image) -->
+                    <div id="kutipan-keberuntungan" class="p-6 rounded-3xl bg-gradient-to-r from-imperial-deep via-imperial-crimson to-imperial-deep border-2 border-imperial-gold/60 gold-border-glow shadow-2xl relative overflow-hidden group">
+                        
+                        <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                            <!-- Golden Mooncake Emblem (Clickable for fortune blessing!) -->
+                            <div onclick="sliceMooncake()" class="cursor-pointer flex-shrink-0 relative group/cake">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-600 via-imperial-gold to-yellow-100 border-4 border-amber-200 flex items-center justify-center shadow-xl animate-mooncake">
+                                    <div class="w-20 h-20 rounded-full border-2 border-dashed border-imperial-deep flex items-center justify-center bg-amber-400/30">
+                                        <span class="font-chinese text-3xl font-extrabold text-imperial-deep group-hover/cake:scale-125 transition-transform">團圓</span>
+                                    </div>
+                                </div>
+                                <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-imperial-gold text-imperial-deep font-bold text-[10px] whitespace-nowrap shadow">
+                                    KLIK & POTONG!
+                                </span>
+                            </div>
+
+                            <div class="text-center sm:text-left flex-1">
+                                <h4 class="text-imperial-gold font-serif font-bold text-base flex items-center justify-center sm:justify-start">
+                                    <i class="fa-solid fa-cookie-bite text-amber-300 mr-2"></i> Pesan Keberuntungan Mooncake
+                                </h4>
+                                <p id="fortune-text" class="text-amber-100 text-xs sm:text-sm italic mt-1 font-serif leading-snug">
+                                    "Klik kue bulan emas di samping untuk memotong dan membuka pesan kehangatan festival kamu!"
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Countdown Timer -->
+                    <div class="pt-2">
+                        <div class="text-xs text-amber-300 font-bold uppercase tracking-widest mb-3 flex items-center justify-center lg:justify-start">
+                            <i class="fa-solid fa-hourglass-half mr-2 animate-spin"></i> Hitung Mundur Acara (25 September 2026)
+                        </div>
+                        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto lg:mx-0" id="countdown-timer">
+                            <div class="bg-imperial-deep/90 border border-imperial-gold/40 p-3 rounded-2xl text-center shadow-lg">
+                                <span id="days" class="text-2xl sm:text-3xl font-extrabold text-imperial-gold block font-mono">00</span>
+                                <span class="text-[10px] text-amber-200/70 uppercase font-semibold">Hari</span>
+                            </div>
+                            <div class="bg-imperial-deep/90 border border-imperial-gold/40 p-3 rounded-2xl text-center shadow-lg">
+                                <span id="hours" class="text-2xl sm:text-3xl font-extrabold text-imperial-gold block font-mono">00</span>
+                                <span class="text-[10px] text-amber-200/70 uppercase font-semibold">Jam</span>
+                            </div>
+                            <div class="bg-imperial-deep/90 border border-imperial-gold/40 p-3 rounded-2xl text-center shadow-lg">
+                                <span id="minutes" class="text-2xl sm:text-3xl font-extrabold text-imperial-gold block font-mono">00</span>
+                                <span class="text-[10px] text-amber-200/70 uppercase font-semibold">Menit</span>
+                            </div>
+                            <div class="bg-imperial-deep/90 border border-imperial-gold/40 p-3 rounded-2xl text-center shadow-lg">
+                                <span id="seconds" class="text-2xl sm:text-3xl font-extrabold text-imperial-gold block font-mono">00</span>
+                                <span class="text-[10px] text-amber-200/70 uppercase font-semibold">Detik</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Hanzi Section -->
+    <section id="hanzi" class="py-20 relative z-10 bg-imperial-deep/95 border-t border-b border-imperial-gold/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-imperial-gold font-chinese text-4xl block mb-1">节日汉字</span>
+                <h2 class="text-3xl sm:text-4xl font-black font-serif text-white uppercase tracking-wider">
+                    Kamus Interaktif Hanzi Festival
+                </h2>
+                <div class="h-1 w-24 bg-gradient-to-r from-transparent via-imperial-gold to-transparent mx-auto my-4"></div>
+                <p class="text-amber-100/80 text-sm sm:text-base">
+                    Klik tombol audio untuk mendengarkan pelafalan Pinyin dan pelajari filosofi mendalam di balik setiap karakter Mandarin Festival Kue Bulan!
+                </p>
+            </div>
+
+            <!-- Hanzi Interactive Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="hanzi-grid">
+                <!-- JavaScript will populate cards here -->
+            </div>
+
+            <!-- Quiz Launcher Banner -->
+            <div class="mt-16 bg-gradient-to-r from-imperial-crimson via-imperial-deep to-imperial-crimson rounded-3xl p-8 border-2 border-imperial-gold/50 shadow-2xl text-center relative overflow-hidden">
+                <div class="max-w-2xl mx-auto space-y-4 relative z-10">
+                    <span class="px-3 py-1 rounded-full bg-imperial-gold/20 text-imperial-gold text-xs font-bold uppercase tracking-widest">
+                        Interaktif Game
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-bold text-imperial-gold font-serif">Uji Kemampuan Hanzi Kamu!</h3>
+                    <p class="text-amber-100/90 text-sm">Ikuti kuis interaktif singkat untuk menguji hafalan kosakata Hanzi festival sebelum acara dimulai.</p>
+                    <button onclick="openQuizModal()" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-imperial-gold to-amber-400 hover:from-amber-300 hover:to-amber-500 text-imperial-deep font-extrabold shadow-xl transition-transform transform hover:scale-105 active:scale-95">
+                        <i class="fa-solid fa-gamepad mr-2"></i> Mulai Kuis Interaktif
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitions Section -->
+    <section id="lomba" class="py-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-imperial-gold font-chinese text-4xl block mb-1">精彩比赛</span>
+                <h2 class="text-3xl sm:text-4xl font-black font-serif text-white uppercase tracking-wider">
+                    Kompetisi Spesial Festival
+                </h2>
+                <div class="h-1 w-24 bg-gradient-to-r from-transparent via-imperial-gold to-transparent mx-auto my-4"></div>
+                <p class="text-amber-100/80 text-sm sm:text-base">
+                    Tunjukkan bakat, kreativitas, dan wawasan budayamu dalam kompetisi bergengsi di SMAK BPK PENABUR Holis.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Competition 1: Chinese Bento -->
+                <div class="bg-imperial-deep/90 rounded-3xl p-8 border-2 border-imperial-gold/40 hover:border-imperial-gold transition-all shadow-2xl relative group flex flex-col justify-between">
+                    <div class="absolute top-6 right-6 w-14 h-14 rounded-2xl bg-imperial-gold/10 border border-imperial-gold/40 flex items-center justify-center text-imperial-gold text-2xl font-bold">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-imperial-gold/20 text-imperial-gold text-xs font-bold uppercase tracking-wider mb-4 inline-block">
+                            Kreasi Kuliner Traditional
+                        </span>
+                        <h3 class="text-2xl font-bold text-white mb-1 font-serif">Chinese Bento Character Competition</h3>
+                        <p class="text-imperial-gold font-chinese text-xl mb-4">中华创意便当大赛</p>
+                        
+                        <p class="text-amber-100/80 text-sm leading-relaxed mb-6">
+                            Kreasi bekal makan Bento bertema ikonik Mooncake Festival (Kelinci Giok, Dewa Bulan Chang'e, Lampion, dll). Dinilai berdasarkan keunikan estetika, kebersihan, serta nilai gizi.
+                        </p>
+
+                        <div class="space-y-3 mb-8 text-sm text-amber-100/90 font-medium">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-user-group text-imperial-gold w-7 text-base"></i>
+                                <span>Kategori: Tim (2-3 Orang per Tim)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-clock text-imperial-gold w-7 text-base"></i>
+                                <span>Durasi Lomba: 90 Menit</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-trophy text-imperial-gold w-7 text-base"></i>
+                                <span>Hadiah Utama: Sertifikat + Piala + Uang Tunai</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="openRegisterModal('Chinese Bento')" class="w-full py-4 rounded-xl bg-gradient-to-r from-imperial-gold via-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-imperial-deep font-extrabold text-center shadow-lg transition-transform transform hover:scale-[1.02] active:scale-95">
+                        <i class="fa-solid fa-pen-to-square mr-2"></i> Daftar Lomba Bento
+                    </button>
+                </div>
+
+                <!-- Competition 2: Storytelling -->
+                <div class="bg-imperial-deep/90 rounded-3xl p-8 border-2 border-imperial-gold/40 hover:border-imperial-gold transition-all shadow-2xl relative group flex flex-col justify-between">
+                    <div class="absolute top-6 right-6 w-14 h-14 rounded-2xl bg-imperial-gold/10 border border-imperial-gold/40 flex items-center justify-center text-imperial-gold text-2xl font-bold">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                    </div>
+
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-imperial-gold/20 text-imperial-gold text-xs font-bold uppercase tracking-wider mb-4 inline-block">
+                            Seni Peran & Bahasa
+                        </span>
+                        <h3 class="text-2xl font-bold text-white mb-1 font-serif">Chinese Storytelling Competition</h3>
+                        <p class="text-imperial-gold font-chinese text-xl mb-4">中秋传说故事演讲比赛</p>
+                        
+                        <p class="text-amber-100/80 text-sm leading-relaxed mb-6">
+                            Bawakan cerita legenda populer Festival Pertengahan Musim Gugur (seperti Legenda *Chang'e*, *Pemanah Hou Yi*, atau *Kelinci Giok*) dengan tutur kata ekspresif dan penuh penghayatan.
+                        </p>
+
+                        <div class="space-y-3 mb-8 text-sm text-amber-100/90 font-medium">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-user text-imperial-gold w-7 text-base"></i>
+                                <span>Kategori: Perorangan / Individu</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-microphone text-imperial-gold w-7 text-base"></i>
+                                <span>Durasi Penampilan: 5 - 7 Menit</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-trophy text-imperial-gold w-7 text-base"></i>
+                                <span>Hadiah Utama: Sertifikat + Piala + Uang Tunai</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="openRegisterModal('Chinese Storytelling')" class="w-full py-4 rounded-xl bg-gradient-to-r from-imperial-gold via-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-imperial-deep font-extrabold text-center shadow-lg transition-transform transform hover:scale-[1.02] active:scale-95">
+                        <i class="fa-solid fa-pen-to-square mr-2"></i> Daftar Lomba Storytelling
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sky Lantern Wish Wall Section -->
+    <section id="harapan" class="py-20 relative z-10 bg-gradient-to-b from-imperial-deep via-imperial-crimson to-imperial-deep border-t border-imperial-gold/30">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-imperial-gold font-chinese text-4xl block mb-1">放飞心愿</span>
+            <h2 class="text-3xl sm:text-4xl font-black font-serif text-white uppercase tracking-wider">
+                Lampion Harapan Interaktif
+            </h2>
+            <div class="h-1 w-24 bg-gradient-to-r from-transparent via-imperial-gold to-transparent mx-auto my-4"></div>
+            <p class="text-amber-100/80 text-sm sm:text-base mb-8">
+                Tuliskan doa dan harapan terbaikmu untuk keluarga, teman, dan impian masa depan. Lampion merah emas milikmu akan diterbangkan menghiasi langit festival!
+            </p>
+
+            <!-- Wish Form Input -->
+            <form id="wish-form" class="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-12" onsubmit="submitWish(event)">
+                <input type="text" id="wish-input" required placeholder="Tulis harapanmu di sini (contoh: Semoga keluarga sehat & sukses di SMAK PENABUR Holis...)" 
+                    class="flex-1 px-5 py-3.5 rounded-full bg-imperial-deep/90 border-2 border-imperial-gold/50 text-white placeholder-amber-200/50 focus:outline-none focus:border-imperial-gold text-sm shadow-inner">
+                <button type="submit" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-imperial-gold to-amber-400 hover:from-amber-300 hover:to-amber-500 text-imperial-deep font-extrabold shadow-lg transition-transform transform hover:scale-105 active:scale-95 whitespace-nowrap">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Terbangkan Lampion
+                </button>
+            </form>
+
+            <!-- Live Wishes Feed -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left" id="wishes-container">
+                <div class="p-5 rounded-2xl bg-imperial-deep/90 border border-imperial-gold/30 shadow-xl">
+                    <div class="flex items-center space-x-2 text-imperial-gold text-xs mb-2 font-bold">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>Lampion Harapan #1</span>
+                    </div>
+                    <p class="text-amber-100 text-sm italic font-serif">"Semoga di festival bulan ini keluarga kita selalu diberi kesehatan, keberkahan dan kehangatan kebersamaan."</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-imperial-deep/90 border border-imperial-gold/30 shadow-xl">
+                    <div class="flex items-center space-x-2 text-imperial-gold text-xs mb-2 font-bold">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>Lampion Harapan #2</span>
+                    </div>
+                    <p class="text-amber-100 text-sm italic font-serif">"Semoga pembelajaran dan ujian di SMAK BPK PENABUR Holis berjalan lancar & meraih nilai terbaik!"</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-imperial-deep/90 border border-imperial-gold/30 shadow-xl">
+                    <div class="flex items-center space-x-2 text-imperial-gold text-xs mb-2 font-bold">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>Lampion Harapan #3</span>
+                    </div>
+                    <p class="text-amber-100 text-sm italic font-serif">"Semoga tali persahabatan antar siswa dan guru semakin erat dan harmonis."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Event Schedule Section -->
+    <section id="lokasi" class="py-20 relative z-10 bg-imperial-deep/95 border-t border-imperial-gold/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left: Venue Details -->
+                <div class="space-y-6">
+                    <span class="text-imperial-gold font-chinese text-4xl block">活动地点与日程</span>
+                    <h2 class="text-3xl sm:text-4xl font-black font-serif text-white uppercase tracking-wider">
+                        Lokasi & Jadwal Acara
+                    </h2>
+                    <p class="text-amber-100/90 leading-relaxed font-light">
+                        Perayaan akan dilangsungkan secara meriah di lokasi utama kampus <strong class="text-imperial-gold font-semibold">SMAK BPK PENABUR Holis Bandung</strong>. Nikmati bazar kuliner, pertunjukan seni tradisional, serta area kompetisi interaktif.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-2xl bg-imperial-crimson/40 border border-imperial-gold/30 flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-imperial-gold/20 flex items-center justify-center text-imperial-gold text-2xl flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-school"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">SMAK BPK PENABUR Holis</h4>
+                                <p class="text-amber-200/80 text-sm">Jl. Holis No. 200, Bandung, Jawa Barat</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-imperial-crimson/40 border border-imperial-gold/30 flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-imperial-gold/20 flex items-center justify-center text-imperial-gold text-2xl flex-shrink-0 mt-1">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Waktu Pelaksanaan</h4>
+                                <p class="text-amber-200/80 text-sm">Jumat, 25 September 2026 | 08:00 - 15:30 WIB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-imperial-gold/20 pt-6">
+                        <h4 class="font-bold text-imperial-gold mb-3 font-serif">Rangkaian Acara Utama:</h4>
+                        <ul class="space-y-2 text-sm text-amber-100/90">
+                            <li class="flex items-center"><i class="fa-solid fa-circle text-imperial-gold text-[8px] mr-3"></i> 08.00 - Upacara & Pembukaan Seni Barongsai Tradisional</li>
+                            <li class="flex items-center"><i class="fa-solid fa-circle text-imperial-gold text-[8px] mr-3"></i> 09.00 - Pelaksanaan Lomba Chinese Bento & Storytelling</li>
+                            <li class="flex items-center"><i class="fa-solid fa-circle text-imperial-gold text-[8px] mr-3"></i> 11.30 - Mooncake Tasting & Workshop Seni Kaligrafi</li>
+                            <li class="flex items-center"><i class="fa-solid fa-circle text-imperial-gold text-[8px] mr-3"></i> 13.30 - Pengumuman Juara Lomba & Penutupan Festival</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right: Map / Location Card -->
+                <div class="bg-imperial-crimson/50 border-2 border-imperial-gold/40 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden">
+                    <div class="w-full h-72 rounded-2xl bg-imperial-deep border border-imperial-gold/30 flex flex-col items-center justify-center relative overflow-hidden group p-6">
+                        <i class="fa-solid fa-map-location-dot text-7xl text-imperial-gold/50 mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="text-xl font-bold text-white font-serif">SMAK BPK PENABUR Holis</h3>
+                        <p class="text-xs text-amber-200/70 mt-1">Kompleks BPK PENABUR Holis, Bandung</p>
+                        <a href="https://maps.google.com/?q=SMAK+BPK+PENABUR+Holis" target="_blank" rel="noopener noreferrer" class="mt-6 px-6 py-2.5 rounded-full bg-imperial-gold text-imperial-deep font-extrabold text-xs hover:bg-amber-300 transition-colors shadow-lg">
+                            <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Buka Google Maps
+                        </a>
+                    </div>
+                    <p class="mt-4 text-xs text-amber-200/60 italic">
+                        *Diimbau untuk hadir tepat waktu demi kelancaran seluruh rangkain acara.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t-2 border-imperial-gold/40 bg-imperial-deep py-12 relative z-10 text-center text-amber-200/80">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="font-chinese text-5xl text-imperial-gold mb-2">花好月圆人团圆</div>
+            <p class="text-imperial-gold font-serif font-bold text-xl tracking-wider mb-2">SMAK BPK PENABUR HOLIS - MOONCAKE FESTIVAL 2026</p>
+            <p class="text-xs text-amber-100/60 max-w-md mx-auto mb-6">
+                Website Resmi Peringatan Festival Pertengahan Musim Gugur SMAK BPK PENABUR Holis Bandung.
+            </p>
+            <p class="text-xs text-amber-200/40">
+                &copy; 2026 SMAK BPK PENABUR Holis. Hak Cipta Dilindungi Undang-Undang.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Registration Modal -->
+    <div id="register-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden">
+        <div class="bg-imperial-deep border-2 border-imperial-gold rounded-3xl p-6 sm:p-8 max-w-md w-full mx-4 relative shadow-2xl">
+            <button onclick="closeModal('register-modal')" class="absolute top-4 right-4 text-imperial-gold hover:text-white text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-imperial-gold font-serif mb-1" id="modal-lomba-title">Pendaftaran Lomba</h3>
+            <p class="text-amber-100/70 text-xs mb-6">Lengkapi data di bawah ini untuk mengonfirmasi partisipasi kamu.</p>
+
+            <form onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-amber-200 mb-1">Nama Lengkap / Ketua Tim</label>
+                    <input type="text" required placeholder="Contoh: Jonathan Lee" class="w-full px-4 py-3 rounded-xl bg-imperial-crimson/50 border border-imperial-gold/40 text-white text-sm focus:border-imperial-gold outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-amber-200 mb-1">Kelas</label>
+                    <input type="text" required placeholder="Contoh: XI IPA 1" class="w-full px-4 py-3 rounded-xl bg-imperial-crimson/50 border border-imperial-gold/40 text-white text-sm focus:border-imperial-gold outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-amber-200 mb-1">Nomor WhatsApp / Kontak</label>
+                    <input type="tel" required placeholder="08123456789" class="w-full px-4 py-3 rounded-xl bg-imperial-crimson/50 border border-imperial-gold/40 text-white text-sm focus:border-imperial-gold outline-none">
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-full bg-imperial-gold hover:bg-amber-300 text-imperial-deep font-extrabold transition-colors shadow-lg mt-2">
+                    Konfirmasi Pendaftaran
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden">
+        <div class="bg-imperial-deep border-2 border-imperial-gold rounded-3xl p-6 sm:p-8 max-w-lg w-full mx-4 relative shadow-2xl">
+            <button onclick="closeModal('quiz-modal')" class="absolute top-4 right-4 text-imperial-gold hover:text-white text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div id="quiz-content">
+                <h3 class="text-2xl font-bold text-imperial-gold font-serif mb-1 text-center">Kuis Hanzi Festival</h3>
+                <p class="text-xs text-amber-200/70 text-center mb-6">Tebak arti bahasa Indonesia dari karakter Mandarin berikut ini!</p>
+                
+                <div class="bg-imperial-crimson/60 border border-imperial-gold/40 p-6 rounded-2xl text-center mb-6">
+                    <span id="quiz-hanzi" class="font-chinese text-6xl text-imperial-gold block mb-2">月饼</span>
+                    <span id="quiz-pinyin" class="text-amber-200 text-sm font-semibold">(yuè bǐng)</span>
+                </div>
+
+                <div class="grid grid-cols-1 gap-3" id="quiz-options">
+                    <!-- Dynamic buttons -->
+                </div>
+
+                <div id="quiz-result" class="mt-4 text-center font-bold text-sm hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Hanzi Interaktif
+        const hanziData = [
+            { hanzi: "中秋节", pinyin: "zhōng qiū jié", meaning: "Festival Pertengahan Musim Gugur", desc: "Perayaan tradisional Tionghoa pada hari ke-15 bulan ke-8 kalender Imlek." },
+            { hanzi: "月饼", pinyin: "yuè bǐng", meaning: "Kue Bulan (Mooncake)", desc: "Kue tradisional berbentuk bulat melambangkan keutuhan dan reuni keluarga." },
+            { hanzi: "嫦娥", pinyin: "cháng é", meaning: "Dewi Bulan Chang'e", desc: "Legenda dewi indah yang meneguk ramuan abadi dan tinggal di Istana Bulan." },
+            { hanzi: "玉兔", pinyin: "yù tù", meaning: "Kelinci Giok", desc: "Kelinci setia sahabat Chang'e yang menumbuk ramuan keabadian di bulan." },
+            { hanzi: "赏月", pinyin: "shǎng yuè", meaning: "Menikmati Rembulan", desc: "Tradisi mengagumi indahnya kebulatan bulan purnama bersama keluarga." },
+            { hanzi: "灯笼", pinyin: "dēng long", meaning: "Lampion / Lentera", desc: "Lampion bermotif indah dinyalakan untuk menerangi malam festival." },
+            { hanzi: "团圆", pinyin: "tuán yuán", meaning: "Reuni / Kebersamaan", desc: "Makna utama Festival Mooncake yaitu berkumpulnya sanak saudara secara utuh." },
+            { hanzi: "后羿", pinyin: "hòu yì", meaning: "Pahlawan Hou Yi", desc: "Pemanah legendaris suami Chang'e yang memanah 9 matahari penjelaga bumi." }
+        ];
+
+        // Mooncake Fortunes / Blessings list for slice function
+        const mooncakeFortunes = [
+            "🥮 'Semoga hidupmu senantiasa berlimpah kebahagiaan dan kehangatan seperti indahnya rembulan malam ini!'",
+            "🥮 'Reuni yang manis dan kesehatan yang prima menyertai langkahmu di SMAK BPK PENABUR Holis!'",
+            "🥮 'Seperti kue bulan yang manis, semoga persahabatan dan impianmu selalu membuahkan hasil yang berkesan!'",
+            "🥮 'Cahaya rembulan menerangi jalan suksesmu. Selamat merayakan Festival Kue Bulan 2026!'"
+        ];
+
+        function sliceMooncake() {
+            const textEl = document.getElementById('fortune-text');
+            const randomFortune = mooncakeFortunes[Math.floor(Math.random() * mooncakeFortunes.length)];
+            textEl.style.opacity = '0';
+            setTimeout(() => {
+                textEl.innerText = randomFortune;
+                textEl.style.opacity = '1';
+            }, 200);
+        }
+
+        // Render Hanzi Cards
+        function renderHanziCards() {
+            const container = document.getElementById('hanzi-grid');
+            container.innerHTML = hanziData.map((item, index) => `
+                <div class="bg-imperial-crimson/40 border border-imperial-gold/30 rounded-2xl p-6 hover:border-imperial-gold transition-all shadow-xl flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-imperial-gold/20 text-imperial-gold">#${index + 1}</span>
+                            <button onclick="speakHanzi('${item.hanzi}')" title="Dengarkan Suara Pelafalan" class="w-10 h-10 rounded-full bg-imperial-gold/20 text-imperial-gold hover:bg-imperial-gold hover:text-imperial-deep transition-colors flex items-center justify-center">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+                        <div class="text-center my-4">
+                            <h3 class="font-chinese text-5xl text-imperial-gold group-hover:scale-110 transition-transform">${item.hanzi}</h3>
+                            <p class="text-amber-200 font-semibold text-sm mt-2 font-mono">${item.pinyin}</p>
+                            <h4 class="text-white font-bold text-base mt-1 font-serif">${item.meaning}</h4>
+                        </div>
+                        <p class="text-amber-100/70 text-xs leading-relaxed text-center font-light">${item.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Web Speech API for Hanzi Audio Pronunciation
+        function speakHanzi(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-CN';
+                utterance.rate = 0.8;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Maaf, peramban Anda belum mendukung sintetis suara.");
+            }
+        }
+
+        /* Web Audio API Traditional Chinese Music Synthesizer (Pentatonic Guzheng Melody) */
+        let audioCtx = null;
+        let isMusicPlaying = false;
+        let musicInterval = null;
+
+        // Chinese Pentatonic Scale Frequencies (D4, E4, F#4, A4, B4, D5, E5, F#5)
+        const pentatonicScale = [293.66, 329.63, 369.99, 440.00, 493.88, 587.33, 659.25, 739.99];
+
+        function playGuzhengNote(freq) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                // Triangle wave mimics traditional plucked string instrument
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                // Quick pluck attack and gentle exponential decay
+                gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.03);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.8);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.8);
+            } catch (e) {}
+        }
+
+        function toggleMusic() {
+            const btnText = document.getElementById('music-status-text');
+            const eqContainer = document.getElementById('eq-container');
+
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (!isMusicPlaying) {
+                isMusicPlaying = true;
+                btnText.innerText = "Musik Pentatonik: ON";
+                eqContainer.classList.remove('eq-paused');
+
+                // Play pentatonic rhythm loop
+                let step = 0;
+                musicInterval = setInterval(() => {
+                    const noteIndex = Math.floor(Math.random() * pentatonicScale.length);
+                    playGuzhengNote(pentatonicScale[noteIndex]);
+                    
+                    // Harmony note occasionally
+                    if (step % 4 === 0) {
+                        setTimeout(() => {
+                            playGuzhengNote(pentatonicScale[0]);
+                        }, 200);
+                    }
+                    step++;
+                }, 450);
+            } else {
+                isMusicPlaying = false;
+                btnText.innerText = "Musik Pentatonik: OFF";
+                eqContainer.classList.add('eq-paused');
+                if (musicInterval) clearInterval(musicInterval);
+            }
+        }
+
+        // Countdown Timer Target Date: 25 September 2026
+        function updateCountdown() {
+            const eventDate = new Date("September 25, 2026 08:00:00").getTime();
+            const now = new Date().getTime();
+            const difference = eventDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = String(days).padStart(2, '0');
+                document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+            } else {
+                document.getElementById('countdown-timer').innerHTML = "<div class='col-span-4 text-imperial-gold font-bold text-lg'>Acara Sedang Berlangsung!</div>";
+            }
+        }
+
+        // Submit Wish Lantern
+        function submitWish(e) {
+            e.preventDefault();
+            const input = document.getElementById('wish-input');
+            const wishText = input.value.trim();
+            if (!wishText) return;
+
+            const container = document.getElementById('wishes-container');
+            const newWish = document.createElement('div');
+            newWish.className = "p-5 rounded-2xl bg-imperial-crimson/80 border border-imperial-gold shadow-2xl animate-pulse";
+            newWish.innerHTML = `
+                <div class="flex items-center space-x-2 text-imperial-gold text-xs mb-2 font-bold">
+                    <i class="fa-solid fa-star"></i>
+                    <span>Lampion Baru Terbang!</span>
+                </div>
+                <p class="text-white text-sm italic font-serif">"${wishText}"</p>
+            `;
+
+            container.prepend(newWish);
+            input.value = '';
+
+            createCanvasLantern();
+        }
+
+        // Modal Controls
+        function openRegisterModal(lombaName) {
+            document.getElementById('modal-lomba-title').innerText = `Pendaftaran ${lombaName}`;
+            document.getElementById('register-modal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function handleRegistrationSubmit(e) {
+            e.preventDefault();
+            alert("Terima kasih! Pendaftaran Anda telah tercatat oleh Panitia SMAK BPK PENABUR Holis.");
+            closeModal('register-modal');
+        }
+
+        // Quiz Logic
+        function openQuizModal() {
+            const currentItem = hanziData[Math.floor(Math.random() * hanziData.length)];
+            
+            document.getElementById('quiz-hanzi').innerText = currentItem.hanzi;
+            document.getElementById('quiz-pinyin').innerText = `(${currentItem.pinyin})`;
+            document.getElementById('quiz-result').classList.add('hidden');
+
+            let options = [currentItem.meaning];
+            while (options.length < 3) {
+                let randomOpt = hanziData[Math.floor(Math.random() * hanziData.length)].meaning;
+                if (!options.includes(randomOpt)) options.push(randomOpt);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = options.map(opt => `
+                <button onclick="checkAnswer('${opt.replace(/'/g, "\\'")}', '${currentItem.meaning.replace(/'/g, "\\'")}')" class="w-full py-3.5 px-4 rounded-xl bg-imperial-crimson/50 hover:bg-imperial-gold hover:text-imperial-deep text-amber-100 font-semibold text-sm transition-colors text-left border border-imperial-gold/30">
+                    ${opt}
+                </button>
+            `).join('');
+
+            document.getElementById('quiz-modal').classList.remove('hidden');
+        }
+
+        function checkAnswer(selected, correct) {
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.remove('hidden');
+            if (selected === correct) {
+                resultDiv.className = "mt-4 text-center font-bold text-sm text-green-300";
+                resultDiv.innerText = "🎉 Benar sekali! Jawaban kamu sangat tepat!";
+            } else {
+                resultDiv.className = "mt-4 text-center font-bold text-sm text-amber-300";
+                resultDiv.innerText = `❌ Kurang tepat. Jawaban yang benar: ${correct}`;
+            }
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Background Red & Gold Sky Lantern Canvas
+        const canvas = document.getElementById('lantern-canvas');
+        const ctx = canvas.getContext('2d');
+        let lanterns = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Lantern {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.speed = Math.random() * 0.6 + 0.3;
+                this.size = Math.random() * 14 + 10;
+                this.alpha = Math.random() * 0.6 + 0.3;
+                this.swing = Math.random() * 0.02;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.y -= this.speed;
+                this.angle += this.swing;
+                this.x += Math.sin(this.angle) * 0.4;
+
+                if (this.y < -50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                
+                // Red Lantern Outer Body
+                ctx.fillStyle = '#A80000';
+                ctx.shadowColor = '#E5C158';
+                ctx.shadowBlur = 12;
+                ctx.beginPath();
+                ctx.roundRect(this.x, this.y, this.size, this.size * 1.3, 5);
+                ctx.fill();
+
+                // Gold Top & Bottom Trim
+                ctx.fillStyle = '#E5C158';
+                ctx.fillRect(this.x, this.y, this.size, 2);
+                ctx.fillRect(this.x, this.y + this.size * 1.3 - 2, this.size, 2);
+
+                // Bright Fire Core
+                ctx.fillStyle = '#FFF2B2';
+                ctx.beginPath();
+                ctx.arc(this.x + this.size/2, this.y + this.size * 0.85, this.size * 0.22, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        function initLanterns() {
+            lanterns = [];
+            for (let i = 0; i < 22; i++) {
+                lanterns.push(new Lantern());
+            }
+        }
+
+        function createCanvasLantern() {
+            lanterns.push(new Lantern());
+        }
+
+        function animateLanterns() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            lanterns.forEach(lantern => {
+                lantern.update();
+                lantern.draw();
+            });
+            requestAnimationFrame(animateLanterns);
+        }
+
+        // Initialize Everything On Load
+        window.onload = function() {
+            renderHanziCards();
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            initLanterns();
+            animateLanterns();
+        };
+    </script>
+</body>
+</html>
+```
