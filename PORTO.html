@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Projek | Koleksi Karya Digital</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+
+    <!-- Latar Belakang Dekoratif (Ambient Glow) -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <!-- Pola Grid Halus -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30"></div>
+    </div>
+
+    <!-- Navbar Minimalis -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-slate-950/75 border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-layer-group text-white text-sm"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+                    DevPortfolio
+                </span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    8 Projek Aktif
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        
+        <!-- Hero Section -->
+        <section class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs sm:text-sm font-medium mb-6">
+                <i class="fa-solid fa-sparkles text-indigo-400"></i>
+                <span>Etalase Karya & Eksperimen Web</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                Portofolio Projek
+            </h1>
+            <p class="text-slate-400 text-base sm:text-lg leading-relaxed">
+                Kumpulan aplikasi web interaktif, simulasi 3D, halaman profil digital, hingga eksplorasi kecerdasan buatan. Klik tombol pada setiap kartu untuk membuka dan mencoba projek secara langsung.
+            </p>
+        </section>
+
+        <!-- Kontrol Filter & Pencarian -->
+        <section class="mb-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-slate-900/60 backdrop-blur-xl p-4 rounded-2xl border border-slate-800/80 shadow-xl">
+            <!-- Tombol Filter Kategori -->
+            <div id="filter-buttons" class="flex flex-wrap items-center gap-2" role="tablist" aria-label="Filter Kategori Projek">
+                <button data-category="all" class="filter-btn active px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 bg-indigo-600 text-white shadow-lg shadow-indigo-500/25">
+                    Semua <span class="ml-1 text-xs opacity-80">(8)</span>
+                </button>
+                <button data-category="Aplikasi & Simulasi" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 bg-slate-800/70 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/50">
+                    Aplikasi & Simulasi <span class="ml-1 text-xs opacity-70">(4)</span>
+                </button>
+                <button data-category="CV & Profil" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 bg-slate-800/70 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/50">
+                    CV & Profil <span class="ml-1 text-xs opacity-70">(3)</span>
+                </button>
+                <button data-category="AI" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 bg-slate-800/70 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/50">
+                    AI <span class="ml-1 text-xs opacity-70">(1)</span>
+                </button>
+            </div>
+
+            <!-- Kolom Pencarian Cepat -->
+            <div class="relative w-full md:w-72">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+                </div>
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Cari nama atau deskripsi projek..." 
+                    class="w-full pl-10 pr-9 py-2.5 bg-slate-950/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                >
+                <button id="clear-search" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white" title="Hapus pencarian">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Grid Kartu Projek -->
+        <section id="projects-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Kartu akan dirender secara dinamis melalui JavaScript -->
+        </section>
+
+        <!-- State Kosong Saat Pencarian Tidak Ditemukan -->
+        <div id="empty-state" class="hidden text-center py-16 px-4 bg-slate-900/40 rounded-3xl border border-slate-800/80">
+            <div class="w-16 h-16 rounded-2xl bg-slate-800/80 text-slate-400 flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-regular fa-folder-open"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-1">Projek tidak ditemukan</h3>
+            <p class="text-slate-400 text-sm mb-5">Coba gunakan kata kunci lain atau atur ulang filter kategori.</p>
+            <button id="reset-filters-btn" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors">
+                Tampilkan Semua Projek
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/60 backdrop-blur-md mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+            <p>&copy; 2026 Portofolio Projek Digital. Dibuat untuk akses cepat ke seluruh karya.</p>
+            <div class="flex items-center gap-4">
+                <span class="text-xs text-slate-500">Klik "Buka Projek" untuk membuka di tab baru</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification untuk Salin Link -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-800/95 backdrop-blur-md border border-slate-700 text-white shadow-2xl">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <i class="fa-solid fa-check text-xs"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium" id="toast-title">Tautan Disalin!</p>
+                <p class="text-xs text-slate-400 truncate max-w-[220px]" id="toast-subtitle">URL berhasil disalin ke clipboard.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Aplikasi -->
+    <script>
+        // Data lengkap seluruh projek
+        const projectsData = [
+            {
+                id: 1,
+                title: "Scanner",
+                category: "Aplikasi & Simulasi",
+                url: "https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Scanner.html",
+                description: "Aplikasi pemindai digital berbasis web untuk memindai dokumen, kode QR, atau barcode secara cepat dan praktis langsung dari browser.",
+                icon: "fa-solid fa-qrcode",
+                gradient: "from-cyan-500 to-blue-600",
+                badgeColor: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20"
+            },
+            {
+                id: 2,
+                title: "Mooncake",
+                category: "Aplikasi & Simulasi",
+                url: "https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Mooncake.html",
+                description: "Eksplorasi visual dan tampilan web tematik bertema Mooncake dengan desain estetis, animasi interaktif, dan penyajian konten yang menarik.",
+                icon: "fa-solid fa-moon",
+                gradient: "from-amber-500 to-orange-600",
+                badgeColor: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20"
+            },
+            {
+                id: 3,
+                title: "Plane Simulation",
+                category: "Aplikasi & Simulasi",
+                url: "https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Planesimulation.html",
+                description: "Simulasi penerbangan pesawat interaktif di browser yang menghadirkan pengalaman kendali terbang, navigasi udara, dan visual dinamis.",
+                icon: "fa-solid fa-plane-departure",
+                gradient: "from-sky-500 to-indigo-600",
+                badgeColor: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20"
+            },
+            {
+                id: 4,
+                title: "CV Kev",
+                category: "CV & Profil",
+                url: "https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Cvkev.html",
+                description: "Curriculum Vitae dan portofolio profil digital milik Kev yang menampilkan riwayat pendidikan, keahlian teknis, serta pengalaman kerja.",
+                icon: "fa-solid fa-user-tie",
+                gradient: "from-emerald-500 to-teal-600",
+                badgeColor: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+            },
+            {
+                id: 5,
+                title: "CV King",
+                category: "CV & Profil",
+                url: "https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Cvking.html",
+                description: "Halaman profil profesional dan resume web untuk King dengan tata letak modern, struktur informasi rapi, dan tampilan responsif.",
+                icon: "fa-solid fa-crown",
+                gradient: "from-yellow-500 to-amber-600",
+                badgeColor: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+            },
+            {
+                id: 6,
+                title: "CV Mark",
+                category: "CV & Profil",
+                url: "https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Cvmark.html",
+                description: "Situs Curriculum Vitae interaktif milik Mark yang merangkum pencapaian, keterampilan utama, dan informasi kontak secara elegan.",
+                icon: "fa-solid fa-id-card",
+                gradient: "from-teal-500 to-cyan-600",
+                badgeColor: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+            },
+            {
+                id: 7,
+                title: "Pears",
+                category: "Aplikasi & Simulasi",
+                url: "https://marciokevin26-source.github.io/2627FSP-IRL-BLACK-10/Pears.html",
+                description: "Aplikasi web kreatif Pears dengan antarmuka interaktif yang dirancang untuk pengalaman pengguna yang ringan, segar, dan responsif.",
+                icon: "fa-solid fa-seedling",
+                gradient: "from-lime-500 to-green-600",
+                badgeColor: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20"
+            },
+            {
+                id: 8,
+                title: "Gemini AI Project",
+                category: "AI",
+                url: "https://share.gemini.google/xaaoNRA1dkkL",
+                description: "Projek kolaborasi dan eksperimen berbasis kecerdasan buatan yang dibagikan melalui platform Google Gemini AI.",
+                icon: "fa-solid fa-wand-magic-sparkles",
+                gradient: "from-purple-500 to-pink-600",
+                badgeColor: "bg-purple-500/10 text-purple-300 border-purple-500/20"
+            }
+        ];
+
+        // State aplikasi
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let toastTimeout;
+
+        // Referensi elemen DOM
+        const projectsGrid = document.getElementById('projects-grid');
+        const emptyState = document.getElementById('empty-state');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const resetFiltersBtn = document.getElementById('reset-filters-btn');
+        const toast = document.getElementById('toast');
+        const toastTitle = document.getElementById('toast-title');
+        const toastSubtitle = document.getElementById('toast-subtitle');
+
+        // Fungsi untuk menampilkan notifikasi toast
+        function showToast(title, subtitle) {
+            toastTitle.textContent = title;
+            toastSubtitle.textContent = subtitle;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Fungsi menyalin URL ke clipboard (kompatibel dengan iFrame)
+        function copyProjectUrl(url, title) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = url;
+            tempInput.style.position = 'fixed';
+            tempInput.style.opacity = '0';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast(`Link "${title}" Disalin!`, url);
+            } catch (err) {
+                showToast('Gagal Menyalin', 'Silakan salin tautan secara manual.');
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+
+        // Fungsi merender kartu projek ke dalam grid
+        function renderProjects() {
+            const filtered = projectsData.filter(project => {
+                const matchesCategory = currentCategory === 'all' || project.category === currentCategory;
+                const query = searchQuery.toLowerCase().trim();
+                const matchesSearch = project.title.toLowerCase().includes(query) || 
+                                      project.description.toLowerCase().includes(query) ||
+                                      project.category.toLowerCase().includes(query);
+                return matchesCategory && matchesSearch;
+            });
+
+            projectsGrid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                projectsGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            projectsGrid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            filtered.forEach((project, index) => {
+                const card = document.createElement('article');
+                card.className = 'group relative flex flex-col justify-between bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 hover:border-indigo-500/50 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-indigo-500/10 animate-fade-in';
+                card.style.animationDelay = `${index * 50}ms`;
+
+                // Ekstrak domain/path pendek untuk tampilan preview URL
+                const displayUrl = project.url.replace(/^https?:\/\//, '');
+
+                card.innerHTML = `
+                    <div>
+                        <!-- Header Kartu: Ikon Visual & Badge Kategori -->
+                        <div class="flex items-start justify-between gap-3 mb-5">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br ${project.gradient} flex items-center justify-center text-white text-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <i class="${project.icon}"></i>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium border ${project.badgeColor}">
+                                ${project.category}
+                            </span>
+                        </div>
+
+                        <!-- Judul & Deskripsi Projek -->
+                        <h2 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">
+                            ${project.title}
+                        </h2>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            ${project.description}
+                        </p>
+                    </div>
+
+                    <!-- Footer Kartu: Preview Link & Tombol Aksi -->
+                    <div class="pt-4 border-t border-slate-800/80 mt-2">
+                        <div class="flex items-center gap-1.5 text-xs text-slate-500 mb-4 truncate" title="${project.url}">
+                            <i class="fa-solid fa-link text-[10px]"></i>
+                            <span class="truncate">${displayUrl}</span>
+                        </div>
+
+                        <div class="flex items-center gap-2.5">
+                            <a 
+                                href="${project.url}" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-200 active:scale-95"
+                            >
+                                <span>Buka Projek</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+
+                            <button 
+                                type="button"
+                                onclick="copyProjectUrl('${project.url}', '${project.title}')"
+                                class="p-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/80 transition-all duration-200 active:scale-95"
+                                title="Salin tautan projek"
+                                aria-label="Salin tautan ${project.title}"
+                            >
+                                <i class="fa-regular fa-copy text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                projectsGrid.appendChild(card);
+            });
+        }
+
+        // Event Listener untuk Tombol Filter
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Reset gaya aktif pada semua tombol
+                filterButtons.forEach(b => {
+                    b.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-500/25');
+                    b.classList.add('bg-slate-800/70', 'text-slate-300', 'border', 'border-slate-700/50');
+                });
+
+                // Terapkan gaya aktif pada tombol yang diklik
+                btn.classList.remove('bg-slate-800/70', 'text-slate-300', 'border', 'border-slate-700/50');
+                btn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-500/25');
+
+                currentCategory = btn.getAttribute('data-category');
+                renderProjects();
+            });
+        });
+
+        // Event Listener untuk Input Pencarian
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            if (searchQuery.length > 0) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            renderProjects();
+        });
+
+        // Tombol Hapus Pencarian
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            searchInput.focus();
+            renderProjects();
+        });
+
+        // Tombol Reset Filter di Empty State
+        resetFiltersBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            currentCategory = 'all';
+            
+            filterButtons.forEach(b => {
+                if (b.getAttribute('data-category') === 'all') {
+                    b.click();
+                }
+            });
+        });
+
+        // Inisialisasi tampilan awal
+        renderProjects();
+    </script>
+</body>
+</html>
